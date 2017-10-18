@@ -7,16 +7,16 @@
 #        Alejandro Rodriguez               #
 #------------------------------------------#
 
-############################################
+#------------------------------------------#
 # Load and Harmonize a dataset from:       #
-############################################
+#------------------------------------------#
 #                                          #
 #             World Bank Data              #
 #                                          #
 #   Accessible through wbstats and WDI     #
 #     packages in R                        #
 #                                          #
-############################################
+#------------------------------------------#
 
 load.WB.data <- function(pIndicators, pCountry = 'all', pStart=2010, pEnd=2015){
 
@@ -47,21 +47,38 @@ load.WB.data <- function(pIndicators, pCountry = 'all', pStart=2010, pEnd=2015){
 
 }
 
-load.WB.medatada<-function()
+
+load.WB.medatada<-function(lang = c("en", "es", "fr", "ar", "zh"))
 {
-  ############################################
-  #                                          #
+  #------------------------------------------#
   #       Download metadata                  #
-  #                                          #
-  ############################################
-
-  #Download indicator list from WB (filter those indicators that have FINDEX as the source)
-  findex_ind <-  wbsearch(pattern = 'Global Findex', 'source', extra = TRUE)
-
-  #filter those indicators that are disagregated by gender using "male" as the pattern
-  findex_ind <- findex_ind %>%
-    filter(grepl (pattern= "male|women", indicator))
-
-  #Write metadata to csv
-  write.csv(findex_ind, file="WB_STG_METADATA_INDICATOR.csv", quote=TRUE, row.names=FALSE)
+  #------------------------------------------#
+  url<-paste0("http://api.worldbank.org/",lang,"/indicators?format=json&per_page=100")
+  return_get <- httr::GET(url)
+  return_json <- httr::content(return_get, as = "text")
+  return_list <- jsonlite::fromJSON(return_json,  flatten = TRUE)
+  df<-as.data.frame(return_list)
+  
+  #Topics 
+  df_wb_ind_topic<-df[,c("id","topics")]
+  df_wb_ind_topic<-unnest(df_wb_ind_topic,topics)
+  df_wb_ind_topic<-df_wb_ind_topic[,c("id","id1")]
+  colnames(df_wb_ind_topic)<-c("src_ind_id","topic_id")
+  
+  #Indicator data
+  schema<-read.csv("./data/schemaMatch.csv")
+  df_wb_metada<-df[,as.vector(schema[schema$action == "keep" & schema$source=="wb", ]$column)]
+  
+  #Add missing columns
+  xx<-as.vector(schema[schema$action == "add" & schema$source=="wb", ]$metadata_schema)
+  
+  df_wb_metada<-cbind(df_wb_metada, setNames( lapply(xx, function(x) x=NA), xx) )
+  
+  colnames(df_wb_metada)<-as.vector(schema[schema$action != "rm" & schema$source=="wb",]$metadata_schema)
+  
+  df_wb_metada$api<-"World Bank"
+  
+   # create a list with required components
+   s <- list(topics = df_wb_ind_topic, ind_metadata=df_wb_metada, src = "wb")
+   s
 }
