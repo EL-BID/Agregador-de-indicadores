@@ -18,7 +18,7 @@
 #                                          #
 #------------------------------------------#
 
-load.WB.data <- function(pIndicators, pCountry = 'all', pStart=2010, pEnd=2015){
+load.WB.data <- function(pIndicators, pCountry = 'all', pStart=2010, pEnd=2015,meta=TRUE){
 
   #General indicators and Global Findex Data are included in this dataframe
 
@@ -28,32 +28,44 @@ load.WB.data <- function(pIndicators, pCountry = 'all', pStart=2010, pEnd=2015){
   #                                          #
   ############################################
 
-
     df_wb <- WDI(indicator = pIndicators, country = pCountry, start=pStart, end=pEnd)
 
     #Rename country code
     df_wb <- df_wb %>% rename (iso2=iso2c)
 
+    #Sort Columns
+    df_cn<-c("iso2","country","year",pIndicators)
+    
+    df_wb<-df_wb[,as.vector(df_cn)]
+    
     #Reshape wide to long and paste
-    df_wb <- df_wb %>% gather('indicatorID', 'value', 4:length(df_wb))
+    df_wb <- df_wb %>% gather('src_id_ind', 'value', 4:length(df_wb))
 
     #Remove rows where value=NA
     df_wb <- df_wb[!is.na(df_wb$value),]
 
-    #remove rows where indicator name=NA
-    df_wb <- df_wb[!is.na(df_wb$indicator),]
+      
+    if(meta)
+    {
+      #missing(ind)
+      
+      df_wb<-sqldf::sqldf("select * from df_wb join ind using(src_id_ind)")
+      #remove rows where indicator name=NA
+      df_wb <- df_wb[!is.na(df_wb$indicator),]
+      
+    }
 
   return(df_wb)
 
 }
-
 
 load.WB.medatada<-function(lang = c("en", "es", "fr", "ar", "zh"))
 {
   #------------------------------------------#
   #       Download metadata                  #
   #------------------------------------------#
-  url<-paste0("http://api.worldbank.org/",lang,"/indicators?format=json&per_page=100")
+  
+  url<-paste0("http://api.worldbank.org/",lang,"/indicators?format=json&per_page=20000")
   return_get <- httr::GET(url)
   return_json <- httr::content(return_get, as = "text")
   return_list <- jsonlite::fromJSON(return_json,  flatten = TRUE)
@@ -65,20 +77,10 @@ load.WB.medatada<-function(lang = c("en", "es", "fr", "ar", "zh"))
   df_wb_ind_topic<-df_wb_ind_topic[,c("id","id1")]
   colnames(df_wb_ind_topic)<-c("src_ind_id","topic_id")
   
-  #Indicator data
-  schema<-read.csv("./data/schemaMatch.csv")
-  df_wb_metada<-df[,as.vector(schema[schema$action == "keep" & schema$source=="wb", ]$column)]
-  
-  #Add missing columns
-  xx<-as.vector(schema[schema$action == "add" & schema$source=="wb", ]$metadata_schema)
-  
-  df_wb_metada<-cbind(df_wb_metada, setNames( lapply(xx, function(x) x=NA), xx) )
-  
-  colnames(df_wb_metada)<-as.vector(schema[schema$action != "rm" & schema$source=="wb",]$metadata_schema)
-  
-  df_wb_metada$api<-"World Bank"
+  df_wb_metada<-schemaMatch(df,api="World Bank",id_api="wb")
   
    # create a list with required components
    s <- list(topics = df_wb_ind_topic, ind_metadata=df_wb_metada, src = "wb")
-   s
+  
+  df_wb_metada
 }

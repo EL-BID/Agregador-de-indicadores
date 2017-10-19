@@ -69,10 +69,7 @@ load.NC.metadata<-function()
  #Filter World Bank
  df_nc_meta<-df_nc_meta %>% filter(!grepl("World Bank", source))
  
- #Indicator metadata
- schema<-read.csv("./data/schemaMatch.csv",quote = "\"")
- df_nc_meta<-df_nc_meta[,as.vector(schema[schema$metadata_schema != "rm" & schema$source=="ncd", ]$column)]
- colnames(df_nc_meta)<-as.vector(schema[schema$metadata_schema != "rm" & schema$source=="ncd",]$metadata_schema)
+ df_nc_meta<-schemaMatch(df_nc_meta,api="No Ceilings",id_api="ncd")
  
  df_nc_meta
  
