@@ -17,15 +17,15 @@
 #                                          #
 #------------------------------------------#
 
-load.NC.data <- function(indicators=c("ADFERRAT"),pStart=2000,pEnd=2015){
+load.NC.data <- function(pIndicators=c("ADFERRAT"),pStart=2010,pEnd=2015, pCountry='all'){
 
   dfList<-list()
   
   #Download data
-  for (i in 1:length(indicators)) {
+  for (i in 1:length(pIndicators)) {
 
-  src_id_ind=indicators[i]
-  
+  src_id_ind=pIndicators[i]
+
   url_data<-paste0("https://raw.githubusercontent.com/fathominfo/noceilings-data/master/csv/",src_id_ind,".csv")
   df<-read.csv(url(url_data))
   
@@ -45,6 +45,7 @@ load.NC.data <- function(indicators=c("ADFERRAT"),pStart=2000,pEnd=2015){
   df$value <- as.numeric(df$value)
   
   df$year<-gsub("X","",df$year)
+  df$year <- as.numeric(df$year)
   
   #Filter time
   df<-df[df$year>=pStart & df$year<=pEnd,]
@@ -52,8 +53,16 @@ load.NC.data <- function(indicators=c("ADFERRAT"),pStart=2000,pEnd=2015){
   dfList[[i]]<-df
   }
   
-  #Filter Countries
+  #merge all indicators
   df<-bind_rows(dfList)
+  #Filter Countries
+  if(length(pCountry)>1&&pCountry!='all')
+  {
+    df_ct<-as.data.frame(pCountry)
+    colnames(df_ct)<-"iso"
+    df<-sqldf::sqldf("select * from df where iso in (select iso from df_ct)")
+  }
+  
   
   return(df)
 

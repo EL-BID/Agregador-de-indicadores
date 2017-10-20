@@ -18,7 +18,7 @@
 #                                          #
 #------------------------------------------#
 
-load.WB.data <- function(pIndicators, pCountry = 'all', pStart=2010, pEnd=2015,meta=TRUE){
+load.WB.data <- function(pIndicators, pCountry = 'all', pStart=2010, pEnd=2015){
 
   #General indicators and Global Findex Data are included in this dataframe
 
@@ -44,16 +44,6 @@ load.WB.data <- function(pIndicators, pCountry = 'all', pStart=2010, pEnd=2015,m
     #Remove rows where value=NA
     df_wb <- df_wb[!is.na(df_wb$value),]
 
-      
-    if(meta)
-    {
-      #missing(ind)
-      
-      df_wb<-sqldf::sqldf("select * from df_wb join ind using(src_id_ind)")
-      #remove rows where indicator name=NA
-      df_wb <- df_wb[!is.na(df_wb$indicator),]
-      
-    }
 
   return(df_wb)
 

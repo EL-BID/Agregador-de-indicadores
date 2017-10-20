@@ -24,29 +24,28 @@ setup<-function()
 
 load.N4D.data <- function(pIndicators, pCountry = 'all', pStart=2010, pEnd=2015){
 
-
+  #dependencies: dplyr, sqldf
+  
   #Download data from indicators
-  df<-iadbstats.list(indicatorCodes=pIndicators)
-
+  df<-iadbstats.list(indicatorCodes=pIndicators,country = pCountry)
 
   #Select columns
-  df <-select(df, -CountryTableName, -IndicatorName, -SubTopicName , -Quarter, -Month, -AggregationLevel, -UOM, -TopicName)
+  df <-dplyr::select(df, -CountryTableName, -IndicatorName, -SubTopicName , -Quarter, -Month, -AggregationLevel, -UOM, -TopicName)
 
-  #Format Country
-  url<-"http://api-data.iadb.org/metadata/country?searchtype=name&searchvalue=All&Languagecode=en&Responsetype=json"
-  return_get <- httr::GET(url)
-  return_json <- httr::content(return_get, as = "text")
-  return_list <- jsonlite::fromJSON(return_json,  flatten = TRUE)
-  df_iadb_ct<-as.data.frame(return_list)
-  
-  #iadb data
-  df_n4d<-sqldf::sqldf("select df_iadb_ct.WB2Code as iso2, df_iadb_ct.CountryTableName as country, df.year as year, df.IndicatorCode as src_id_ind, df.AggregatedValue as value from df join df_iadb_ct using (CountryCode)")
+  #Format Country and filter time
+  df_iadb_ct<-iadbstats.countries()
+  sql <- sprintf("select df_iadb_ct.WB2Code as iso2, 
+                         df_iadb_ct.CountryTableName as country, 
+                         df.year as year, 
+                         df.IndicatorCode as src_id_ind, 
+                         df.AggregatedValue as value 
+                          from df join df_iadb_ct using (CountryCode)
+                            where df.year>= %s and df.year<= %s", pStart, pEnd)
+  df_n4d<-sqldf::sqldf(sql)
   
   #TO-DO
-  # Get country in iadbstats package
-  #Filter time 
-  # Add country to iadbstats.list
-
+  # Cache countries
+  
   return(df_n4d)
 
 }
