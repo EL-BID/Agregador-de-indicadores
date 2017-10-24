@@ -55,16 +55,33 @@ load.NC.data <- function(pIndicators=c("ADFERRAT"),pStart=2010,pEnd=2015, pCount
   
   #merge all indicators
   df<-bind_rows(dfList)
+  
+  
+  #Format Country and filter time
+  df_wb_ct<-wbstats::wbcountries()
+  
+  sql <- sprintf("select df_wb_ct.iso2c as iso2, 
+                         df_wb_ct.country, 
+                         df.year as year, 
+                         df.src_id_ind, 
+                         df.value 
+                          from df join df_wb_ct on df.iso=df_wb_ct.iso3c")
+  
+  df_ncd<-sqldf::sqldf(sql)
+  
   #Filter Countries
   if(length(pCountry)>1&&pCountry!='all')
   {
     df_ct<-as.data.frame(pCountry)
-    colnames(df_ct)<-"iso"
-    df<-sqldf::sqldf("select * from df where iso in (select iso from df_ct)")
+    colnames(df_ct)<-"iso2"
+    
+    df_ncd<-sqldf::sqldf("select * 
+                    from df_ncd where iso2 in (select iso from df_ct)")
   }
   
+  df_ncd$iso2<-as.character(df_ncd$iso2)
   
-  return(df)
+  return(df_ncd)
 
 }
 

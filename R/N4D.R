@@ -43,6 +43,9 @@ load.N4D.data <- function(pIndicators, pCountry = 'all', pStart=2010, pEnd=2015)
                             where df.year>= %s and df.year<= %s", pStart, pEnd)
   df_n4d<-sqldf::sqldf(sql)
   
+  df_n4d$year<-as.numeric(df_n4d$year)
+  df_n4d$value<-as.numeric(df_n4d$value)
+  
   #TO-DO
   # Cache countries
   
