@@ -20,14 +20,13 @@ rm(new.packages)
 
 library(dplyr)
 library(tidyr)
-library('govdata360R')
 
 #-------------------------------------------------------
 #------govdata360
 #-------------------------------------------------------
 download.govdata360<-function(pIndicators)
 {
-  df_gd360 <-  gov360stats.list(indicatorCodes=pIndicators)
+  df_gd360 <-  govdata360R::gov360stats.list(indicatorCodes=pIndicators)
 
   return(df_gd360)
 }
@@ -42,7 +41,7 @@ download.datasetByID.govdata360 <- function(idSource=428)
 {
 
   #Get Data
-  df=govdata360DS(idDS)
+  df=govdata360R::govdata360DS(idDS)
 
   #Transforma data
   df = df %>% gather('year','value',5:length(df))
@@ -57,7 +56,7 @@ download.datasetByID.govdata360 <- function(idSource=428)
 
 download.datasetByName.govdata360<-function(sourceName="Global Integrity")
 {
-  dfGovData <- gov360msearch(sourceSearch = sourceName)
+  dfGovData <- govdata360R::gov360msearch(sourceSearch = sourceName)
 
   #Add row ids
   dfGovData$rid<- seq.int(nrow(dfGovData))

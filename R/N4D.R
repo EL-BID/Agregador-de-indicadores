@@ -55,7 +55,7 @@ load.N4D.data <- function(pIndicators, pCountry = 'all', pStart=2010, pEnd=2015)
 
 load.N4D.metadata<-function(lang = c("en", "es", "fr", "ar", "zh"))
 {
-  df<-iadbmsearch('ALL',lang = lang)
+  df<-iadbstats::iadbmsearch('ALL',lang = lang)
   
   df_n4d_metada<-schemaMatch(df,api="Numbers for Development",id_api="n4d")
   

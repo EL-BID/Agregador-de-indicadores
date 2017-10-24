@@ -55,7 +55,7 @@ load.WB.medatada<-function(lang = c("en", "es", "fr", "ar", "zh"))
   #       Download metadata                  #
   #------------------------------------------#
   
-  url<-paste0("http://api.worldbank.org/",lang,"/indicators?format=json&per_page=20000")
+  url<-paste0("http://api.worldbank.org/",lang,"/indicators?format=json&per_page=100")
   return_get <- httr::GET(url)
   return_json <- httr::content(return_get, as = "text")
   return_list <- jsonlite::fromJSON(return_json,  flatten = TRUE)
