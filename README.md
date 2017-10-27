@@ -1,0 +1,1 @@
+# Agregador-de-indicadores
