@@ -88,3 +88,24 @@ ai_cache <- function(lang = c("en", "es", "fr", "ar", "zh")) {
   
   cache_list
 }
+
+ai_classify_indicators<-function(indicator_df)
+{
+  indicator_df$gender<-"total" 
+  indicator_df$area<-"total"
+  indicator_df$multiplier<-1
+  #Todo fix topic
+  indicator_df$topic<-"Other"
+ 
+  library(RSQLite)
+  conn <- dbConnect(dbDriver("SQLite"), dbname = "ai.db")  
+  dbWriteTable(conn, "indicator_df", indicator_df, row.names = F,overwrite=TRUE)
+  
+  sqlcommands<-readSQLCommands("./R/msc/classify.sql")
+  df<-runSQL(sqlcmdlist=sqlcommands,con=conn)
+  
+  #db_drop_table(conn,"indicator_df")
+  dbDisconnect(conn)
+  
+  df
+}

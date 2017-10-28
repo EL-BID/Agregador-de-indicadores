@@ -4,7 +4,18 @@
 #' a data frame of matching results
 #'
 #' @param pattern Character string or regular expression to be matched
-#' @param fields Character vector of column names through which to search from: "src_id_ind","indicator","ind_description","source","src_id_dataset","dataset","uom","api"  
+#' @param fields Character vector of column names through which to search from:   
+#' @note 
+#  The options for \code{fields} are:
+#' \itemize{
+#' \item \code{src_id_ind}: id of the indicator in the source (World Bank, Numbers for Development, No Celings and GovData360)
+#' \item \code{indicator}: name of the indicator
+#' \item \code{ind_description}: description of the indicator
+#' \item \code{source}: source of the indicator
+#' \item \code{src_id_dataset}: id of the dataset in the source
+#' \item \code{dataset}: name of the dataset in the source
+#' \item \code{api}: World Bank, Numbers for Development and No Celings.
+#' }
 #' @param extra if \code{FALSE}, only the indicator ID and short name are returned,
 #' if \code{TRUE}, all columns of the \code{cache} parameter's indicator data frame
 #' are returned

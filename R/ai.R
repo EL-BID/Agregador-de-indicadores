@@ -1,3 +1,28 @@
+#' Download data from indicators of the from World Bank API, Numbers for Development API and No Celings 
+#'
+#' @param lang Language in which to return the metadata of the indicators. If \code{lang} is unspecified,
+#' english is the default.
+#' @note Not all data returns have support for langauges other than english. Indicators from No Celings are only available in english. If the specific return
+#' does not support your requested language by default it will return \code{NA}. For an enumeration of
+#' supported languages by data source.
+#' The options for \code{lang} are:
+#' \itemize{
+#' \item \code{en}: English
+#' \item \code{es}: Spanish
+#' \item \code{fr}: French
+#' \item \code{ar}: Arabic
+#' \item \code{zh}: Mandarin
+#' }
+#' @param startdate Start date of the requested date range of the indicator data
+#' @param enddate End date of the requsted date range of the indicator data
+#' @param country List of countries. If \code{country} is unspecified,
+#' 'all' is the default.
+#' @param cache Cache of the metadata of the indicators, countries and topics
+#' @return A data frame with the data of the indicator, countries and date range specified
+#' @examples
+#' # default is english. To specific another language use argument lang
+#' ai(lang = "en")
+#' @export
 ai <- function(country = "all", indicator, startdate=2010, enddate=2015,
                lang = c("en", "es", "fr", "ar", "zh"), meta=TRUE,cache)
 {
