@@ -74,3 +74,27 @@ ai <- function(country = "all", indicator, startdate=2010, enddate=2015,
   
   df
 }
+
+ai_normalize<-function(data)
+{
+  country_df<-agregadorindicadores::ai_cachelist$countries_wb
+  
+  df_ind_year<-sqldf::sqldf("SELECT src_id_ind, year, avg(value) as mean, stdev(value) as stddev, count(*) as total
+            from data JOIN country_df on iso2=iso2c
+            where income='Aggregates'
+            group by YEAR, src_id_ind;")
+  
+  
+  index <- df_ind_year$stddev == 0
+  df_ind_year$stddev[index] <- 1 
+
+   sqldf::sqldf("select 
+                ind.*,
+                (ind.VALUE-indY.mean)/indY.stddev*multiplier as value_norm,
+                indY.total as nr_countries
+                from 
+                data ind LEFT outer JOIN df_ind_year indY
+                ON  ind.src_id_ind= indY.src_id_ind
+                AND ind.year= indY.year;")
+   
+}

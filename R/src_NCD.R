@@ -1,5 +1,4 @@
 #------------------------------------------#
-#                                          #
 #   Banco Inter-americano de Desarrollo    #
 #       Agregador Indicadores              #
 #                                          #
@@ -11,12 +10,41 @@
 #            No Ceilings Data              #
 #                                          #
 #   Downloaded from www.noceilings.org     #
-#   Set the folder where the data can      #
-#    be found in the NCD_FOLDER variable   #
-#    (config.R file)                       #
-#                                          #
 #------------------------------------------#
 
+#' Download Data from the No Ceilings www.noceilings.org
+#'
+#' @param country Character vector of country or region codes. Default value is special code of \code{all}.
+#'  Other permissible values are codes in the following fields from the \code{\link{ai_cachelist}} \code{countries_idb}
+#'  data frame.  \code{iso2c}
+#' @param indicator Character vector of indicator codes. These codes correspond to the \code{src_id_ind} column
+#'  from the \code{indicator} data frame of \code{\link{ai_cache}} or \code{\link{ai_cachelist}}, or
+#'  the result of \code{\link{ai_search}}
+#' @param startdate Numeric. Year (four digit) of the start of the requested date range.
+#' @param enddate Numeric. Year (four digit) of the end of the requested date range.
+#' @param cache List of data frames returned from \code{\link{ai_cache}}. If omitted,
+#'  \code{\link{ai)_cachelist}} is used
+#' @param lang Language in which to return the results. If \code{lang} is unspecified,
+#'  english is the default.
+#' @return Data frame with all available requested data.
+#'
+#' @note Not all data returns have support for langauges other than english. If the specific return
+#'  does not support your requested language by default it will return \code{NA}.
+#'  The options for \code{lang} are:
+#'  \itemize{
+#'  \item \code{en}: English
+#'  \item \code{es}: Spanish
+#'  \item \code{fr}: French
+#'  \item \code{ar}: Arabic
+#'  \item \code{zh}: Mandarin
+#'  }
+#'  If there is no data available that matches the request parameters, an empty data frame is returned along with a
+#'  \code{warning}.
+#'
+#'  @examples
+#' load.NC.data(pIndicators=c("ADFERRAT"))
+#' pIndicators=c("ADFERRAT",pStart=2013,pEnd=2015, pCountry='all')
+#' @export
 load.NC.data <- function(pIndicators=c("ADFERRAT"),pStart=2010,pEnd=2015, pCountry='all'){
 
   dfList<-list()
@@ -85,9 +113,16 @@ load.NC.data <- function(pIndicators=c("ADFERRAT"),pStart=2010,pEnd=2015, pCount
 
 }
 
+#' Download updated indicator metadata from Numbers for Development (N4D) API
+#'
+#' @return A data frame of available indicators with related metadata
+#' @note The only language supported for this source of information is english
+#' 
+#' @examples 
+#' load.NC.metadata()
+#' @export
 load.NC.metadata<-function()
 {
-
  #Download Metadata
  url_meta="https://raw.githubusercontent.com/fathominfo/noceilings-data/master/indicators.csv"
  df_nc_meta<-read.csv(url(url_meta))

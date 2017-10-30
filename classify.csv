@@ -1,0 +1,42 @@
+classify,keyword,val
+multiplier,not good at math,-1
+multiplier,helpless at math,-1
+multiplier,Year women obtained election,-1
+multiplier,Press Freedom Index,-1
+multiplier,VAW laws SIGI,-1
+multiplier,Unmet need,-1
+multiplier,unemployed,-1
+multiplier,unemployment,-1
+multiplier,Out of school,-1
+multiplier,homicide,-1
+multiplier,outstanding,-1
+multiplier,informal,-1
+multiplier,death,-1
+multiplier,mort,-1
+multiplier,drop,-1
+multiplier,HIV,-1
+multiplier,viol,-1
+multiplier,disor,-1
+multiplier, vulnerable,-1
+multiplier, fertility,-1
+multiplier,unimpro,-1
+multiplier,disea,-1
+multiplier,wife beating,-1
+multiplier,working very long,-1
+multiplier,DALYs,-1
+multiplier,Forced first sex,-1
+gender,girls,female
+gender,female,female
+gender,female,female
+gender,women,female
+gender,women,female
+gender,gender,female
+gender,vawlaws,female
+gender,maternity,female
+gender,GPI,female
+gender,domesticviolence,female
+gender,mother,female
+gender,sexualharassment,female
+gender, male,male
+gender, men,male
+gender,paternity,male

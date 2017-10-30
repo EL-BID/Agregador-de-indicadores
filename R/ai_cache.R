@@ -39,6 +39,8 @@ meta_indicators <- function(lang = c("en", "es", "fr", "ar", "zh")) {
   
   indicators_df<-rbind(wb,n4d,ncd)
   
+  indicators_df<-ai_classify_indicators(indicators_df)
+  
   indicators_df
 }
 
@@ -91,21 +93,20 @@ ai_cache <- function(lang = c("en", "es", "fr", "ar", "zh")) {
 
 ai_classify_indicators<-function(indicator_df)
 {
-  indicator_df$gender<-"total" 
-  indicator_df$area<-"total"
-  indicator_df$multiplier<-1
-  #Todo fix topic
-  indicator_df$topic<-"Other"
- 
-  library(RSQLite)
-  conn <- dbConnect(dbDriver("SQLite"), dbname = "ai.db")  
-  dbWriteTable(conn, "indicator_df", indicator_df, row.names = F,overwrite=TRUE)
+  keywords<-read.csv("classify.csv", stringsAsFactors = FALSE)
   
-  sqlcommands<-readSQLCommands("./R/msc/classify.sql")
-  df<-runSQL(sqlcmdlist=sqlcommands,con=conn)
+  #Gender
+  kw_female<-aggregate(keyword ~.,data =  keywords[keywords$classify=='gender' & keywords$val=='female',],paste, collapse="|")
+  kw_male<-aggregate(keyword ~.,data =  keywords[keywords$classify=='gender' & keywords$val=='male',],paste, collapse="|")
+  indicator_df<-indicator_df %>% mutate (gender = ifelse(grepl (kw_female$keyword,indicator), 'female', ifelse(grepl (kw_male$keyword,indicator),'male','total') %>% as.character()))
   
-  #db_drop_table(conn,"indicator_df")
-  dbDisconnect(conn)
   
-  df
+  #Multiplier
+  kw_multiplier<-aggregate(keyword ~.,data =  keywords[keywords$classify=='multiplier' & keywords$val=='-1',],paste, collapse="|")
+  indicator_df<-indicator_df %>% mutate (multiplier = ifelse(grepl (kw_multiplier$keyword,indicator), -1, 1) %>% as.character())
+  
+  #Area
+  indicator_df<-indicator_df %>% mutate (area = ifelse (grepl("urban",indicator), "urban", ifelse (grepl("rural",indicator), "rural", "total")) %>% as.character())
+  
+  return(indicator_df)
 }

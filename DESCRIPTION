@@ -15,5 +15,8 @@ Imports: dplyr,
           httr,
           jsonlite,
           sqldf,
-          devtools
+          devtools,
+          gdata,
+          WDI
 Remotes: arcuellar88/govdata360R, arcuellar88/iadbstats
+RoxygenNote: 6.0.1

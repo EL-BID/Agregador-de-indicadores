@@ -14,7 +14,10 @@
 #' \item \code{source}: source of the indicator
 #' \item \code{src_id_dataset}: id of the dataset in the source
 #' \item \code{dataset}: name of the dataset in the source
+#' \item \code{gender}: female, male or total
+#' \item \code{area}: rural, urban or total
 #' \item \code{api}: World Bank, Numbers for Development and No Celings.
+#' 
 #' }
 #' @param extra if \code{FALSE}, only the indicator ID and short name are returned,
 #' if \code{TRUE}, all columns of the \code{cache} parameter's indicator data frame
@@ -43,7 +46,6 @@ ind_search <- function(pattern = "poverty", fields = c("indicator", "ind_descrip
   
   if (length(match_index) == 0) warning(paste0("no matches were found for the search term ", pattern,
                                                ". Returning an empty data frame."))
-  
   
   if (extra) {
     
