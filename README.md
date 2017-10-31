@@ -1,54 +1,101 @@
 # Agregador-de-indicadores
 
-Visita la [Guía de Publicación](el-bid.github.io/guia-de-publicacion/) para saber más sobre cómo publicar herramientas digitales.
-Para aprender más sobre la iniciativa de Código para el Desarrollo visita: www.code.iadb.org
-
-## Plantilla de Documentación de Soporte y Uso de herramientas digitales
-
 ### Nombre
+agregadorindicadores
+
 ### Descripción y contexto
 ---
-Esto es un archivo README. Debe contener la documentación de soporte uso de la herramienta digital. Las siguientes secciones son las secciones recomendadas que debes poner incluir en cualquier herramienta digital. Puedes descargar este archivo para que te sirva como plantilla.
-
-Asegúrate de empezar este archivo con una breve descripción sobre las funcionalidades y contexto de la herramienta digital. Sé conciso y al grano.
+El “Agregador de Indicadores” permite a académicos, multilaterales y otras organizaciones con interés en analizar indicadores de desarrollo, analizar y comparar indicadores de diferentes fuentes y con diversas unidades de medida. 
+Con el esta herramienta es posible buscar con una función los indicadores del Banco Mundial (https://data.worldbank.org/data-catalog), Numbers for Development (N4D) del Banco Interamericano de Desarrollo (https://data.iadb.org/NumbersForDevelopment/NumbersForDevelopment) y de No Ceilings (http://www.noceilings.org)
 
 ### Guía de usuario
 ---
-Explica los pasos básicos sobre cómo usar la herramienta digital. Es una buena sección para mostrar capturas de pantalla o gifs que ayuden a entender la herramienta digital.
- 	
+
+#### Cargar la libreria
+```r
+library(agregadorindicadores)
+```
+
+#### Buscar un indicadores de deseempleo
+```r
+df<-ind_search(pattern="unemployment")
+df[1:5,1:3]
+
+src_id_ind                                                             indicator        api
+1220       SL.UEM.TOTL.ZS   Unemployment, total (% of total labor force) (modeled ILO estimate) World Bank
+1221    SL.UEM.TOTL.NE.ZS      Unemployment, total (% of total labor force) (national estimate) World Bank
+1222    SL.UEM.TOTL.MA.ZS     Unemployment, male (% of male labor force) (modeled ILO estimate) World Bank
+1223 SL.UEM.TOTL.MA.NE.ZS        Unemployment, male (% of male labor force) (national estimate) World Bank
+1224    SL.UEM.TOTL.FE.ZS Unemployment, female (% of female labor force) (modeled ILO estimate) World Bank
+```
+#### Verificar las distintas fuentes de informacion
+
+```r
+unique(df$api)
+[1] "World Bank"              "Numbers for Development" "No Ceilings"   
+```
+Con una misma funciono obtuvimos datos de 3 fuentes distintas de informacion.
+
+#### Descargar informacion de dos indicadores para dos países entre el 2014 y el 2015
+```r
+data<-ai(indicator = c("SL.UEM.TOTL.FE.ZS","SOC_6562"), country = c("CO","PE"),startdate = 2014, enddate=2015)
+ data[1:8,1:6]
+  iso2  country year        src_id_ind  value                                                             indicator
+1   CO Colombia 2015 SL.UEM.TOTL.FE.ZS 11.843 Unemployment, female (% of female labor force) (modeled ILO estimate)
+2   CO Colombia 2014 SL.UEM.TOTL.FE.ZS 11.971 Unemployment, female (% of female labor force) (modeled ILO estimate)
+3   PE     Peru 2015 SL.UEM.TOTL.FE.ZS  5.004 Unemployment, female (% of female labor force) (modeled ILO estimate)
+4   PE     Peru 2014 SL.UEM.TOTL.FE.ZS  4.731 Unemployment, female (% of female labor force) (modeled ILO estimate)
+5   CO Colombia 2014          SOC_6562 10.253                  Unemployment Rate, Female, No quint data, 25-49 age 
+6   CO Colombia 2015          SOC_6562 10.285                  Unemployment Rate, Female, No quint data, 25-49 age 
+7   PE     Peru 2014          SOC_6562  2.845                  Unemployment Rate, Female, No quint data, 25-49 age 
+8   PE     Peru 2015          SOC_6562  2.926                  Unemployment Rate, Female, No quint data, 25-49 age 
+```
 ### Guía de instalación
 ---
-Paso a paso de cómo instalar la herramienta digital. En esta sección es recomendable explicar la arquitectura de carpetas y módulos que componen el sistema.
+Para utilizar la libreria en R se debe ejecutar el siguiente codigo:
 
-Según el tipo de herramienta digital, el nivel de complejidad puede variar. En algunas ocasiones puede ser necesario instalar componentes que tienen dependencia con la herramienta digital. Si este es el caso, añade también la siguiente sección.
+```r
+install.packages('devtools')
+library(devtools)
+install_github('arcuellar88/iadbstats')
+install_github('arcuellar88/govdata360R')
+install_github('EL-BID/Agregador-de-indicadores')
+library(agregadorindicadores)
+```
 
 #### Dependencias
-Descripción de los recursos externos que generan una dependencia para la reutilización de la herramienta digital (librerías, frameworks, acceso a bases de datos y licencias de cada recurso). Es una buena práctica describir las últimas versiones en las que ha sido probada la herramienta digital. 
+El agregador de indicadores utiliza las siguientes librerias de R:
 
-    Puedes usar este estilo de letra diferenciar los comandos de instalación.
+    dplyr, tidyr, sqldf gdata y son para manipular los datos (merge, join, agregar columnas, filtrar, etc.)
+    wbstats,WDI para conectarse con el API del Banco Mundial 
+    httr, jsonlite se utilizan para leer los resultados del llamo a los distintos APIs    
 
-[Este](https://github.com/EL-BID/SmartMap) es un buen ejemplo de una descripción de dependencias.
+Adicionalmente se utiliza otras librerias de github: 
+
+    'arcuellar88/iadbstats' para conectarse con el API del Banco Interamericano de Desarrollo   https://github.com/arcuellar88/iadbstats
+       'arcuellar88/govdata360R' para conectarse con el API govdata360 del banco Mundial   https://github.com/arcuellar88/govdata360R
+
 
 ### Cómo contribuir
 ---
+TO-DO
 Esta sección explica a desarrolladores cuáles son las maneras habituales de enviar una solicitud de adhesión de nuevo código (“pull requests”), cómo declarar fallos en la herramienta y qué guías de estilo se deben usar al escribir más líneas de código.
 
 ### Código de conducta 
 ---
+TO-DO
 El código de conducta establece las normas sociales, reglas y responsabilidades que los individuos y organizaciones deben seguir al interactuar de alguna manera con la herramienta digital o su comunidad. Es una buena práctica para crear un ambiente de respeto e inclusión en las contribuciones al proyecto. La plataforma Github premia y ayuda a los repositorios dispongan de este archivo. Al crear CODE_OF_CONDUCT.md puedes empezar desde una plantilla sugerida por ellos. 
 
 ### Autor/es
 ---
-Nombra a el/los autor/es original/es. Consulta con ellos antes de publicar un email o un nombre personal. Una manera muy común es dirigirlos a sus cuentas de redes sociales.
-
-### Información adicional
----
-Esta es la sección que permite agregar más información de contexto al proyecto como alguna web de relevancia, proyectos similares o que hayan usado la misma tecnología.
+Alejandro Rodríguez Cuéllar (https://github.com/arcuellar88)
 
 ### Licencia 
 ---
-La licencia especifica los permisos y las condiciones de uso que el desarrollador otorga a otros desarrolladores que usen y/o modifiquen la herramienta digital.
+GNU General Public License v3.0
 
-Incluye en esta sección una note con el tipo de licencia otorgado a esta herramienta digital. El texto de la licencia debe estar incluído en un archivo *LICENSE.md* o *LICENSE.txt* en la carpeta raíz.
-
-Si desconoces qué tipos de licencias existen y cuál es la mejor para cada caso, te recomendamos visitar la página https://choosealicense.com/.
+### TO-DO
+1. Topics
+2. GovData360
+3. ggplot examples
+4. Documentation
