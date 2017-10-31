@@ -16,7 +16,7 @@ Con el esta herramienta es posible buscar con una función los indicadores del B
 library(agregadorindicadores)
 ```
 
-#### Buscar un indicadores de deseempleo
+#### Buscar un indicadores de desempleo
 ```r
 df<-ind_search(pattern="unemployment")
 df[1:5,1:3]
@@ -66,9 +66,9 @@ library(agregadorindicadores)
 #### Dependencias
 El agregador de indicadores utiliza las siguientes librerias de R:
 
-    dplyr, tidyr, sqldf gdata y son para manipular los datos (merge, join, agregar columnas, filtrar, etc.)
-    wbstats,WDI para conectarse con el API del Banco Mundial 
-    httr, jsonlite se utilizan para leer los resultados del llamo a los distintos APIs    
+    dplyr, tidyr, sqldf gdata se utilizan para manipular los datos (merge, join, agregar columnas, filtrar, etc.)
+    wbstats,WDI se utilizan para conectarse con el API del Banco Mundial 
+    httr, jsonlite se utilizan para leer los resultados del llamodo a los distintos APIs    
 
 Adicionalmente se utiliza otras librerias de github: 
 
@@ -97,5 +97,6 @@ GNU General Public License v3.0
 ### TO-DO
 1. Topics
 2. GovData360
-3. ggplot examples
-4. Documentation
+3. ggplot and normalization examples
+4. Documentation (cache)
+
