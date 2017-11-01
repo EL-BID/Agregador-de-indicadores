@@ -64,6 +64,21 @@ Para mayor información sobre la descarga de datos de los indicadores ejecuta en
 ```r
 ?ai
 ```
+#### 4. ggplot examples
+
+Plot indicator "Agricultural land (% of land area)" for 4 countries in 2014
+```r
+df<-ai(indicator = "AG.LND.AGRI.ZS", country = c("CO", "PE","ZA","US"), startdate = 2014)
+```
+```r
+df$fCountry <- factor(df$country)
+p <- ggplot(df, aes(x=fCountry, y=value,colour=fCountry,hover = indicator))  +
+  geom_point(shape=1) 
+p <- ggplotly(p)
+p
+```
+![](https://plot.ly/~arcuellar88/11/)
+
 
 #### 3. Ranking de indicadores
 
