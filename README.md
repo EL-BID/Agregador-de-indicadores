@@ -69,7 +69,7 @@ Para mayor información sobre la descarga de datos de los indicadores ejecuta en
 
 El agregador de indicadores ofrece una funcionalidad adicional para normalizar los indicadores y hacer un raking por país y por año. La normalizacioón consiste en comparar el valor del indicador de cada país contra la media y la desviación de ese mismo indicador para todos los países para cada año.
 
-<img src="http://www.sciweavers.org/tex2img.php?eq=z-country-year%3D%0A%5Cfrac%7B%20%5Ctext%7B%28country%20value%20in%20a%20year%29%7D-%5Ctext%7B%28average%20of%20all%20countries%20in%20the%20same%20year%29%7D%7D%7B%5Ctext%7B%28Standard%20deviation%20of%20all%20countries%20in%20the%20same%20year%29%7D%0A%7D&bc=White&fc=Black&im=jpg&fs=12&ff=arev&edit=0" align="center" border="0" alt="z-country-year=\frac{ \text{(country value in a year)}-\text{(average of all countries in the same year)}}{\text{(Standard deviation of all countries in the same year)}}" width="762" height="47" />
+![](https://raw.githubusercontent.com/EL-BID/Agregador-de-indicadores/master/zscore.png?token=AI3Mx-FDwVxXvP5FOsvubMK5WsoscA8Tks5aA4TYwA%3D%3D)
 
 
 Una de las aplicaciones de esta normalizacion es comparar un conjunto de indicadores en un mismo gráfico. En el siguiente ejemplo se gráfico se muestran más de 1500 indicadores relacionados con género para 8 países para el 2014. En el gráfico se puede ver que Somalia e iraq tienen muchos más indicadores debajo de la media que el resto de países.
