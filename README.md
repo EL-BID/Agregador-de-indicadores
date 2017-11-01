@@ -77,7 +77,7 @@ p <- ggplot(df, aes(x=fCountry, y=value,colour=fCountry,hover = indicator))  +
 p <- ggplotly(p)
 p
 ```
-![](https://plot.ly/~arcuellar88/11/)
+![](https://plot.ly/~arcuellar88/11.png)
 
 
 #### 3. Ranking de indicadores
