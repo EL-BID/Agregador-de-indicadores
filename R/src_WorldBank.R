@@ -54,35 +54,42 @@
 #' pIndicators=c("SL.UEM.TOTL.NE.ZS",pStart=2013,pEnd=2015, pCountry='all')
 #' @export
 load.WB.data <- function(pIndicators, pCountry = 'all', pStart=2010, pEnd=2015){
-
+  
   #General indicators and Global Findex Data are included in this dataframe
-
+  
   ############################################
   #                                          #
   #       Download indicator data            #
   #                                          #
   ############################################
-    library(WDI)
-    df_wb <- WDI::WDI(indicator = pIndicators, country = pCountry, start=pStart, end=pEnd)
-
-    detach("package:WDI", unload=TRUE)  
-    #Rename country code
-    df_wb <- df_wb %>% dplyr::rename (iso2=iso2c)
-
-    #Sort Columns
-    df_cn<-c("iso2","country","year",pIndicators)
-    
-    df_wb<-df_wb[,as.vector(df_cn)]
-    
-    #Reshape wide to long and paste
-    df_wb <- df_wb %>% gather('src_id_ind', 'value', 4:length(df_wb))
-
-    #Remove rows where value=NA
-    df_wb <- df_wb[!is.na(df_wb$value),]
-
-
+  suppressWarnings(suppressMessages(library(WDI)))
+  suppressWarnings(suppressMessages(library(dplyr)))
+  suppressWarnings(suppressMessages(library(tidyr)))
+  
+  
+  df_wb <- WDI::WDI(indicator = pIndicators, country = pCountry, start=pStart, end=pEnd)
+  
+  
+  #Rename country code
+  df_wb <- df_wb %>% dplyr::rename (iso2=iso2c)
+  
+  #Sort Columns
+  df_cn<-c("iso2","country","year",pIndicators)
+  
+  df_wb<-df_wb[,as.vector(df_cn)]
+  
+  #Reshape wide to long and paste
+  df_wb <- df_wb %>% gather('src_id_ind', 'value', 4:length(df_wb))
+  
+  #Remove rows where value=NA
+  df_wb <- df_wb[!is.na(df_wb$value),]
+  
+  detach("package:WDI", unload=TRUE)  
+  detach("package:dplyr", unload=TRUE) 
+  detach("package:tidyr", unload=TRUE) 
+  
   return(df_wb)
-
+  
 }
 
 #' Download updated indicator metadata from World Bank API
@@ -126,8 +133,8 @@ load.WB.medatada<-function(lang = c("en", "es", "fr", "ar", "zh"))
   
   df_wb_metada<-schemaMatch(df,api="World Bank",id_api="wb")
   
-   # create a list with required components
-   s <- list(topics = df_wb_ind_topic, ind_metadata=df_wb_metada, src = "wb")
+  # create a list with required components
+  s <- list(topics = df_wb_ind_topic, ind_metadata=df_wb_metada, src = "wb")
   
   df_wb_metada
 }

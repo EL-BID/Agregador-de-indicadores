@@ -26,13 +26,25 @@
 #' \code{\link{ai_cache_list}} is used
 #' @return Data frame with indicators that match the search pattern.
 #' @examples
+#' # Search by keyword
 #' ind_search(pattern = "education")
-#'
+#' 
+#' # Search by source organization
 #' ind_search(pattern = "Food and Agriculture Organization", fields = "sourceOrg")
 #'
-#' # with regular expression operators
-#' # 'poverty' OR 'unemployment' OR 'employment'
+#' # Regular expression operators
+#' 'poverty' OR 'unemployment' OR 'employment'
 #' ind_search(pattern = "poverty|unemployment|employment")
+#' 
+#' # Search for gender related indicators
+#' ind_search(pattern = "male", c("gender"))
+#' 
+#' # Get all indicators from the Numbers for Development
+#' ind_search(pattern = "Numbers for Development", c("api"))
+#' 
+#' # Get all Rural indicators
+#' ind_search(pattern = "rural", c("area"))
+#' 
 #' @export
 ind_search <- function(pattern = "poverty", fields = c("indicator", "ind_description"), extra = FALSE, cache){
   

@@ -16,7 +16,7 @@ Con el esta herramienta es posible buscar con una función los indicadores del B
 library(agregadorindicadores)
 ```
 
-#### Buscar un indicadores de desempleo
+#### 1. Buscar un indicadores de desempleo
 ```r
 df<-ind_search(pattern="unemployment")
 df[1:5,1:3]
@@ -28,7 +28,7 @@ src_id_ind                                                             indicator
 1223 SL.UEM.TOTL.MA.NE.ZS        Unemployment, male (% of male labor force) (national estimate) World Bank
 1224    SL.UEM.TOTL.FE.ZS Unemployment, female (% of female labor force) (modeled ILO estimate) World Bank
 ```
-#### Verificar las distintas fuentes de informacion
+Verificar las distintas fuentes de informacion
 
 ```r
 unique(df$api)
@@ -36,7 +36,15 @@ unique(df$api)
 ```
 Con una misma funciono obtuvimos datos de 3 fuentes distintas de informacion.
 
-#### Descargar informacion de dos indicadores para dos países entre el 2014 y el 2015
+Para mayor información sobre la buúsqueda de indicadores ver:
+```r
+?ind_search
+```
+
+#### 2. Descargar informacion de dos indicadores
+
+En este ejemplo vamos a descargar los datos de dos indicadores para dos países entre el 2014 y el 2015
+
 ```r
 data<-ai(indicator = c("SL.UEM.TOTL.FE.ZS","SOC_6562"), country = c("CO","PE"),startdate = 2014, enddate=2015)
  data[1:8,1:6]
@@ -50,6 +58,12 @@ data<-ai(indicator = c("SL.UEM.TOTL.FE.ZS","SOC_6562"), country = c("CO","PE"),s
 7   PE     Peru 2014          SOC_6562  2.845                  Unemployment Rate, Female, No quint data, 25-49 age 
 8   PE     Peru 2015          SOC_6562  2.926                  Unemployment Rate, Female, No quint data, 25-49 age 
 ```
+
+Para mayor información sobre la buúsqueda de indicadores ejecuta en R:
+```r
+?ai
+```
+
 ### Guía de instalación
 ---
 Para utilizar la libreria en R se debe ejecutar el siguiente codigo:
@@ -62,6 +76,24 @@ install_github('arcuellar88/govdata360R')
 install_github('EL-BID/Agregador-de-indicadores')
 library(agregadorindicadores)
 ```
+
+Mientras el repositorio sea privado:
+
+1) Instalar dependencias de github
+```r
+install.packages('devtools')
+library(devtools)
+install_github('arcuellar88/iadbstats')
+install_github('arcuellar88/govdata360R')
+```
+
+2) Importar el repositorio a RStudio
+
+File->new project -> Version Control-> copiar url de github (el mismo de clonar)
+
+3) Instalar
+En la pestaña Build-> 'Install and Restart'
+
 
 #### Dependencias
 El agregador de indicadores utiliza las siguientes librerias de R:
@@ -99,4 +131,9 @@ GNU General Public License v3.0
 2. GovData360
 3. ggplot and normalization examples
 4. Documentation (cache)
+
+### Improvements
+1. Agregar filtros a la búsqueda de indicadores
+2. Verificar duplicados entre distintas fuentes de información
+3. Example folder
 

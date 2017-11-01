@@ -10,8 +10,8 @@
 #' \item \code{en}: English
 #' \item \code{es}: Spanish
 #' \item \code{fr}: French
-#' \item \code{ar}: Arabic
-#' \item \code{zh}: Mandarin
+#' \item \code{ar}: Arabic - only for the World Bank
+#' \item \code{zh}: Mandarin - only for the World Bank
 #' }
 #' @param startdate Start date of the requested date range of the indicator data
 #' @param enddate End date of the requsted date range of the indicator data
@@ -21,7 +21,8 @@
 #' @return A data frame with the data of the indicator, countries and date range specified
 #' @examples
 #' # default is english. To specific another language use argument lang
-#' ai(lang = "en")
+#' ai(indicator = c("SOC_046","SL.UEM.TOTL.NE.ZS"),lang = "en")
+#' ai(indicator = c("CONTFEHQ","SOC_046","SL.UEM.TOTL.NE.ZS"),country = c("CO"),startdate = 2000,enddate = 2015)
 #' @export
 ai <- function(country = "all", indicator, startdate=2010, enddate=2015,
                lang = c("en", "es", "fr", "ar", "zh"), meta=TRUE,cache)
@@ -59,14 +60,15 @@ ai <- function(country = "all", indicator, startdate=2010, enddate=2015,
   if(length(nc_ind)>0)
   {
     df_list[[nr_df]]<-load.NC.data(pIndicators = nc_ind, pCountry=country,pStart = startdate,pEnd=enddate)
+    nr_df=nr_df+1
   }
   
-  df<-bind_rows(df_list)
+  df<-dplyr::bind_rows(df_list)
   
   if(meta)
   {
     df<-sqldf::sqldf("select * from df join ind using(src_id_ind)")
-   
+    
     #remove rows where indicator name=NA
     df <- df[!is.na(df$indicator),]
     
@@ -80,21 +82,21 @@ ai_normalize<-function(data)
   country_df<-agregadorindicadores::ai_cachelist$countries_wb
   
   df_ind_year<-sqldf::sqldf("SELECT src_id_ind, year, avg(value) as mean, stdev(value) as stddev, count(*) as total
-            from data JOIN country_df on iso2=iso2c
-            where income='Aggregates'
-            group by YEAR, src_id_ind;")
+                            from data JOIN country_df on iso2=iso2c
+                            where income='Aggregates'
+                            group by YEAR, src_id_ind;")
   
   
   index <- df_ind_year$stddev == 0
   df_ind_year$stddev[index] <- 1 
-
-   sqldf::sqldf("select 
-                ind.*,
-                (ind.VALUE-indY.mean)/indY.stddev*multiplier as value_norm,
-                indY.total as nr_countries
-                from 
-                data ind LEFT outer JOIN df_ind_year indY
-                ON  ind.src_id_ind= indY.src_id_ind
-                AND ind.year= indY.year;")
-   
+  
+  sqldf::sqldf("select 
+               ind.*,
+               (ind.VALUE-indY.mean)/indY.stddev*multiplier as value_norm,
+               indY.total as nr_countries
+               from 
+               data ind LEFT outer JOIN df_ind_year indY
+               ON  ind.src_id_ind= indY.src_id_ind
+               AND ind.year= indY.year;")
+  
 }

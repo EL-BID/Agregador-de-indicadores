@@ -34,15 +34,30 @@ a data frame of matching results
 \item \code{source}: source of the indicator
 \item \code{src_id_dataset}: id of the dataset in the source
 \item \code{dataset}: name of the dataset in the source
+\item \code{gender}: female, male or total
+\item \code{area}: rural, urban or total
 \item \code{api}: World Bank, Numbers for Development and No Celings.
+
 }
 }
 \examples{
+# Search by keyword
 ind_search(pattern = "education")
 
+# Search by source organization
 ind_search(pattern = "Food and Agriculture Organization", fields = "sourceOrg")
 
-# with regular expression operators
-# 'poverty' OR 'unemployment' OR 'employment'
+# Regular expression operators
+'poverty' OR 'unemployment' OR 'employment'
 ind_search(pattern = "poverty|unemployment|employment")
+
+# Search for gender related indicators
+ind_search(pattern = "male", c("gender"))
+
+# Get all from the Numbers for Development
+ind_search(pattern = "Numbers for Development", c("api"))
+
+# Get all Rural indicators
+ind_search(pattern = "rural", c("area"))
+
 }
