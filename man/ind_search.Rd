@@ -54,7 +54,7 @@ ind_search(pattern = "poverty|unemployment|employment")
 # Search for gender related indicators
 ind_search(pattern = "male", c("gender"))
 
-# Get all from the Numbers for Development
+# Get all indicators from the Numbers for Development
 ind_search(pattern = "Numbers for Development", c("api"))
 
 # Get all Rural indicators

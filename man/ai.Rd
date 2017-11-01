@@ -35,11 +35,14 @@ The options for \code{lang} are:
 \item \code{en}: English
 \item \code{es}: Spanish
 \item \code{fr}: French
-\item \code{ar}: Arabic
-\item \code{zh}: Mandarin
+\item \code{ar}: Arabic - only for the World Bank
+\item \code{zh}: Mandarin - only for the World Bank
 }
 }
 \examples{
-# default is english. To specific another language use argument lang
-ai(lang = "en")
+# Get the data for two indicators and all countries
+ai(indicator = c("SOC_046","SL.UEM.TOTL.NE.ZS"))
+
+#Get the data for two indicators and one country from 2000 until 2015
+ai(indicator = c("CONTFEHQ","SOC_046","SL.UEM.TOTL.NE.ZS"),country = c("CO"),startdate = 2000,enddate = 2015)
 }

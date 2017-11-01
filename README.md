@@ -1,3 +1,4 @@
+---
 # Agregador-de-indicadores
 
 ### Nombre
@@ -36,7 +37,7 @@ unique(df$api)
 ```
 Con una misma funciono obtuvimos datos de 3 fuentes distintas de informacion.
 
-Para mayor información sobre la buúsqueda de indicadores ver:
+Para mayor información sobre la buúsqueda de indicadores ejecuta en R:
 ```r
 ?ind_search
 ```
@@ -59,14 +60,26 @@ data<-ai(indicator = c("SL.UEM.TOTL.FE.ZS","SOC_6562"), country = c("CO","PE"),s
 8   PE     Peru 2015          SOC_6562  2.926                  Unemployment Rate, Female, No quint data, 25-49 age 
 ```
 
-Para mayor información sobre la buúsqueda de indicadores ejecuta en R:
+Para mayor información sobre la descarga de datos de los indicadores ejecuta en R:
 ```r
 ?ai
 ```
 
+#### 3. Ranking de indicadores
+
+El agregador de indicadores ofrece una funcionalidad adicional para normalizar los indicadores y hacer un raking por país y por año. La normalizacioón consiste en comparar el valor del indicador de cada país contra la media y la desviación de ese mismo indicador para todos los países para cada año.
+
+![](http://bit.ly/2z5Jbx2)
+
+Una de las aplicaciones de esta normalizacion es comparar un conjunto de indicadores en un mismo gráfico. En el siguiente ejemplo se gráfico se muestran más de 1500 indicadores relacionados con género para 8 países para el 2014. En el gráfico se puede ver que Somalia e iraq tienen muchos más indicadores debajo de la media que el resto de países.
+
+![](https://plot.ly/~arcuellar88/9.png)
+
+El paso a paso de este ejemplo lo pueden ver en /ejemplos/ranking_plot.R
+
 ### Guía de instalación
 ---
-Para utilizar la libreria en R se debe ejecutar el siguiente codigo:
+Para utilizar la librería en R se debe ejecutar el siguiente codigo:
 
 ```r
 install.packages('devtools')
@@ -77,7 +90,7 @@ install_github('EL-BID/Agregador-de-indicadores')
 library(agregadorindicadores)
 ```
 
-Mientras el repositorio sea privado:
+Si el repositorio 'EL-BID/Agregador-de-indicadores' es privado:
 
 1) Instalar dependencias de github
 ```r
@@ -92,20 +105,21 @@ install_github('arcuellar88/govdata360R')
 File->new project -> Version Control-> copiar url de github (el mismo de clonar)
 
 3) Instalar
+
 En la pestaña Build-> 'Install and Restart'
 
 
 #### Dependencias
 El agregador de indicadores utiliza las siguientes librerias de R:
 
-    dplyr, tidyr, sqldf gdata se utilizan para manipular los datos (merge, join, agregar columnas, filtrar, etc.)
+   dplyr, tidyr, sqldf gdata se utilizan para manipular los datos (merge, join, agregar columnas, filtrar, etc.)
     wbstats,WDI se utilizan para conectarse con el API del Banco Mundial 
     httr, jsonlite se utilizan para leer los resultados del llamodo a los distintos APIs    
 
 Adicionalmente se utiliza otras librerias de github: 
 
-    'arcuellar88/iadbstats' para conectarse con el API del Banco Interamericano de Desarrollo   https://github.com/arcuellar88/iadbstats
-       'arcuellar88/govdata360R' para conectarse con el API govdata360 del banco Mundial   https://github.com/arcuellar88/govdata360R
+   'arcuellar88/iadbstats' para conectarse con el API del Banco Interamericano de Desarrollo   https://github.com/arcuellar88/iadbstats
+      'arcuellar88/govdata360R' para conectarse con el API govdata360 del banco Mundial   https://github.com/arcuellar88/govdata360R
 
 
 ### Cómo contribuir
@@ -127,13 +141,12 @@ Alejandro Rodríguez Cuéllar (https://github.com/arcuellar88)
 GNU General Public License v3.0
 
 ### TO-DO
-1. Topics
+1. Temas
 2. GovData360
-3. ggplot and normalization examples
-4. Documentation (cache)
+3. Documentation (cache)
+4. Quitar Warnings
 
-### Improvements
+### Mejoras futuras
 1. Agregar filtros a la búsqueda de indicadores
 2. Verificar duplicados entre distintas fuentes de información
-3. Example folder
-
+3. Mejorar el tiempo de carga par No Ceilings

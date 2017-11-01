@@ -51,7 +51,8 @@
 #'
 #'  @examples
 #' load.WB.data(pIndicators=c("SL.UEM.TOTL.NE.ZS"))
-#' pIndicators=c("SL.UEM.TOTL.NE.ZS",pStart=2013,pEnd=2015, pCountry='all')
+#' 
+#' load.WB.data(pIndicators=c("SL.UEM.TOTL.NE.ZS"),pStart=2013,pEnd=2015, pCountry='all')
 #' @export
 load.WB.data <- function(pIndicators, pCountry = 'all', pStart=2010, pEnd=2015){
   
@@ -73,10 +74,16 @@ load.WB.data <- function(pIndicators, pCountry = 'all', pStart=2010, pEnd=2015){
   #Rename country code
   df_wb <- df_wb %>% dplyr::rename (iso2=iso2c)
   
-  #Sort Columns
-  df_cn<-c("iso2","country","year",pIndicators)
-  
-  df_wb<-df_wb[,as.vector(df_cn)]
+  # When only one indicator is returned
+  if(length(colnames(df_wb))==4)
+  {
+    #Sort Columns
+    df_cn<-c("iso2","country","year",colnames(df_wb)[3])
+    
+    #df<-ai(indicator = ind[1:1000,]$src_id_ind, startdate=2014, enddate=2014)
+    
+    df_wb<-df_wb[,as.vector(df_cn)]
+  }
   
   #Reshape wide to long and paste
   df_wb <- df_wb %>% gather('src_id_ind', 'value', 4:length(df_wb))

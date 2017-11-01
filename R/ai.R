@@ -20,8 +20,10 @@
 #' @param cache Cache of the metadata of the indicators, countries and topics
 #' @return A data frame with the data of the indicator, countries and date range specified
 #' @examples
-#' # default is english. To specific another language use argument lang
-#' ai(indicator = c("SOC_046","SL.UEM.TOTL.NE.ZS"),lang = "en")
+#' # Get the data for two indicators and all countries
+#' ai(indicator = c("SOC_046","SL.UEM.TOTL.NE.ZS"))
+#'
+#' #Get the data for two indicators and one country from 2000 until 2015
 #' ai(indicator = c("CONTFEHQ","SOC_046","SL.UEM.TOTL.NE.ZS"),country = c("CO"),startdate = 2000,enddate = 2015)
 #' @export
 ai <- function(country = "all", indicator, startdate=2010, enddate=2015,
@@ -81,9 +83,10 @@ ai_normalize<-function(data)
 {
   country_df<-agregadorindicadores::ai_cachelist$countries_wb
   
+  # Compute the mean
   df_ind_year<-sqldf::sqldf("SELECT src_id_ind, year, avg(value) as mean, stdev(value) as stddev, count(*) as total
                             from data JOIN country_df on iso2=iso2c
-                            where income='Aggregates'
+                            where income not like 'Aggregates'
                             group by YEAR, src_id_ind;")
   
   

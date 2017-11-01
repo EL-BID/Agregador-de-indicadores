@@ -4,7 +4,7 @@
 \alias{load.NC.data}
 \title{Download Data from the No Ceilings www.noceilings.org}
 \usage{
-load.NC.data(pIndicators = c("ADFERRAT"), pStart = 2010, pEnd = 2015,
+load.NC.data(pIndicators = c("CONTFEHQ"), pStart = 2010, pEnd = 2015,
   pCountry = "all")
 }
 \arguments{
@@ -47,6 +47,6 @@ Not all data returns have support for langauges other than english. If the speci
  \code{warning}.
 
  @examples
-load.NC.data(pIndicators=c("ADFERRAT"))
-pIndicators=c("ADFERRAT",pStart=2013,pEnd=2015, pCountry='all')
+load.NC.data(pIndicators=c("CONTFEHQ"))
+pIndicators=c("CONTFEHQ",pStart=2013,pEnd=2015, pCountry='all')
 }

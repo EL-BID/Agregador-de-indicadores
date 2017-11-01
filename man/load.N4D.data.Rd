@@ -46,6 +46,6 @@ Not all data returns have support for langauges other than english. If the speci
  \code{warning}.
 
  @examples
-load.NC.data(pIndicators=c("ADFERRAT"))
-pIndicators=c("ADFERRAT",pStart=2013,pEnd=2015, pCountry='all')
+load.NC.data(pIndicators=c("SOC_046"))
+pIndicators=c("SOC_046",pStart=2013,pEnd=2015, pCountry='all')
 }
