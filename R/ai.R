@@ -65,6 +65,14 @@ ai <- function(country = "all", indicator, startdate=2010, enddate=2015,
     nr_df=nr_df+1
   }
   
+  #360
+  nc_ind<-indicators[indicators$api=="Govdata360",]$src_id_ind
+  if(length(nc_ind)>0)
+  {
+    df_list[[nr_df]]<-load.360.data(pIndicators = nc_ind, pCountry=country,pStart = startdate,pEnd=enddate)
+    nr_df=nr_df+1
+  }
+  
   df<-dplyr::bind_rows(df_list)
   
   if(meta)

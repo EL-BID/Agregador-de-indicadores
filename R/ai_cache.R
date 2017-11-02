@@ -37,8 +37,11 @@ meta_indicators <- function(lang = c("en", "es", "fr", "ar", "zh")) {
   #NCD
   ncd<-load.NC.metadata()
   
+  #360
+  gov360<-load.360.medatada()
+  
   #Merge all indicators
-  indicators_df<-rbind(wb,n4d,ncd)
+  indicators_df<-rbind(wb,n4d,ncd,gov360)
   
   #Classify indicators: gender, area (rural, urban) and multiplier
   indicators_df<-ai_classify_indicators(indicators_df)
@@ -95,6 +98,8 @@ ai_cache <- function(lang = c("en", "es", "fr", "ar", "zh")) {
 
 ai_classify_indicators<-function(indicator_df)
 {
+  suppressWarnings(suppressMessages(library(dplyr)))
+  
   keywords<-read.csv("classify.csv", stringsAsFactors = FALSE)
   
   #Gender
@@ -108,6 +113,8 @@ ai_classify_indicators<-function(indicator_df)
   
   #Area
   indicator_df<-indicator_df %>% mutate (area = ifelse (grepl("urban",indicator), "urban", ifelse (grepl("rural",indicator), "rural", "total")) %>% as.character())
+  
+  detach("package:dplyr", unload=TRUE) 
   
   return(indicator_df)
 }

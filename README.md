@@ -164,7 +164,7 @@ Para utilizar la librería en R se debe ejecutar el siguiente codigo:
 install.packages('devtools')
 library(devtools)
 install_github('arcuellar88/iadbstats')
-install_github('arcuellar88/govdata360R')
+install_github("mrpsonglao/data360r")
 install_github('EL-BID/Agregador-de-indicadores')
 library(agregadorindicadores)
 ```
@@ -176,7 +176,7 @@ Si el repositorio 'EL-BID/Agregador-de-indicadores' es privado:
 install.packages('devtools')
 library(devtools)
 install_github('arcuellar88/iadbstats')
-install_github('arcuellar88/govdata360R')
+install_github("arcuellar88/govdata360R")
 ```
 
 2) Importar el repositorio a RStudio
@@ -191,14 +191,14 @@ En la pestaña Build-> 'Install and Restart'
 #### Dependencias
 El agregador de indicadores utiliza las siguientes librerias de R:
 
-   + dplyr, tidyr, sqldf gdata se utilizan para manipular los datos (merge, join, agregar   columnas, filtrar, etc.)
-   + wbstats,WDI se utilizan para conectarse con el API del Banco Mundial 
-    httr, jsonlite se utilizan para leer los resultados del llamodo a los distintos APIs    
+   + **dplyr**, **tidyr** , **sqldf** y **gdata** se utilizan para manipular los datos (merge, join, agregar   columnas, filtrar, etc.)
+   + **wbstats** , **WDI** se utilizan para conectarse con el API del Banco Mundial 
+   + **httr** , **jsonlite** se utilizan para leer los resultados del llamodo a los distintos APIs    
 
 Adicionalmente se utiliza otras librerias de github: 
 
-   + 'arcuellar88/iadbstats' para conectarse con el API del Banco Interamericano de Desarrollo   https://github.com/arcuellar88/iadbstats
-   + 'arcuellar88/govdata360R' para conectarse con el API govdata360 del banco Mundial   https://github.com/arcuellar88/govdata360R
+   + 'arcuellar88/iadbstats' para conectarse con el [API del Banco Interamericano de Desarrollo](https://github.com/arcuellar88/iadbstats)
+   + 'arcuellar88/govdata360R' para conectarse con el [API govdata360 del Banco Mundial](https://github.com/arcuellar88/govdata360R)
 
 
 ### Cómo contribuir y Código de conducta 
@@ -215,8 +215,7 @@ Adicionalmente se utiliza otras librerias de github:
 
 ### TO-DO
 1. Temas
-2. GovData360
-3. Quitar Warnings
+2. Quitar Warnings
 
 ### Ideas
 1. Agregar filtros a la búsqueda de indicadores

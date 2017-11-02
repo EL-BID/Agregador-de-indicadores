@@ -127,6 +127,8 @@ load.NC.data <- function(pIndicators=c("CONTFEHQ"),pStart=2010,pEnd=2015, pCount
 #' @export
 load.NC.metadata<-function()
 {
+  
+  suppressWarnings(suppressMessages(library(dplyr)))
   #Download Metadata
   url_meta="https://raw.githubusercontent.com/fathominfo/noceilings-data/master/indicators.csv"
   df_nc_meta<-read.csv(url(url_meta))
@@ -136,6 +138,8 @@ load.NC.metadata<-function()
   
   df_nc_meta<-schemaMatch(df_nc_meta,api="No Ceilings",id_api="ncd")
   
-  df_nc_meta
+  detach("package:dplyr", unload=TRUE) 
+  
+  return(df_nc_meta)
   
 }
