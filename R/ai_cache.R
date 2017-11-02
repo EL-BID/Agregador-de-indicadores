@@ -37,8 +37,10 @@ meta_indicators <- function(lang = c("en", "es", "fr", "ar", "zh")) {
   #NCD
   ncd<-load.NC.metadata()
   
+  #Merge all indicators
   indicators_df<-rbind(wb,n4d,ncd)
   
+  #Classify indicators: gender, area (rural, urban) and multiplier
   indicators_df<-ai_classify_indicators(indicators_df)
   
   indicators_df
@@ -99,7 +101,6 @@ ai_classify_indicators<-function(indicator_df)
   kw_female<-aggregate(keyword ~.,data =  keywords[keywords$classify=='gender' & keywords$val=='female',],paste, collapse="|")
   kw_male<-aggregate(keyword ~.,data =  keywords[keywords$classify=='gender' & keywords$val=='male',],paste, collapse="|")
   indicator_df<-indicator_df %>% mutate (gender = ifelse(grepl (kw_female$keyword,indicator), 'female', ifelse(grepl (kw_male$keyword,indicator),'male','total') %>% as.character()))
-  
   
   #Multiplier
   kw_multiplier<-aggregate(keyword ~.,data =  keywords[keywords$classify=='multiplier' & keywords$val=='-1',],paste, collapse="|")

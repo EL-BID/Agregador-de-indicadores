@@ -7,7 +7,7 @@ agregadorindicadores
 ### Descripción y contexto
 ---
 El “Agregador de Indicadores” permite a académicos, multilaterales y otras organizaciones con interés en analizar indicadores de desarrollo, analizar y comparar indicadores de diferentes fuentes y con diversas unidades de medida. 
-Con el esta herramienta es posible buscar con una función los indicadores del Banco Mundial (https://data.worldbank.org/data-catalog), Numbers for Development (N4D) del Banco Interamericano de Desarrollo (https://data.iadb.org/NumbersForDevelopment/NumbersForDevelopment) y de No Ceilings (http://www.noceilings.org)
+Con el esta herramienta es posible buscar con una función los indicadores del [Banco Mundial](https://data.worldbank.org/data-catalog), [Numbers for Development,  N4D](https://data.iadb.org/NumbersForDevelopment/NumbersForDevelopment) del Banco Interamericano de Desarrollo  y de [No Ceilings](http://www.noceilings.org)
 
 ### Guía de usuario
 ---
@@ -66,7 +66,14 @@ Para mayor información sobre la descarga de datos de los indicadores ejecuta en
 ```
 #### 4. ggplot examples
 
-Plot one indicator "Agricultural land (% of land area)" for 4 countries in 2014
+For all plot example we will use plot.ly library for r.
+
+```r
+library(plotly)
+```
+
+
+##### Plot one indicator "Agricultural land (% of land area)" for 4 countries in 2014
 ```r
 df<-ai(indicator = "AG.LND.AGRI.ZS", country = c("CO", "PE","ZA","US"), startdate = 2014)
 ```
@@ -77,9 +84,10 @@ p <- ggplot(df, aes(x=fCountry, y=value,colour=fCountry,hover = indicator))  +
 p <- ggplotly(p)
 p
 ```
+
 ![](https://plot.ly/~arcuellar88/11.png)
 
-Plot two indicators from two different sources for one country and five years
+##### Plot two indicators from two different sources for one country and five years
 
 ```r
 df<-ai(indicator = c("NV.AGR.TOTL.ZS","LMW_403"), country = c("PE"), startdate = 2010)
@@ -100,30 +108,53 @@ ay <- list(
     
    p
 ```
+&nbsp;
 
-```r
-df$fCountry <- factor(df$country)
-p <- ggplot(df, aes(x=fCountry, y=value,colour=fCountry,hover = indicator))  +
-  geom_point(shape=1) 
-p <- ggplotly(p)
-p
-```
+
 ![](https://plot.ly/~arcuellar88/13.png)
-
 
 
 #### 3. Ranking de indicadores
 
 El agregador de indicadores ofrece una funcionalidad adicional para normalizar los indicadores y hacer un raking por país y por año. La normalización consiste en comparar el valor del indicador de cada país contra la media y la desviación de ese mismo indicador para todos los países para cada año. Para cada indicador, país y año se calcula el zscore de la siguiente manera:
 
+&nbsp;
 ![](https://raw.githubusercontent.com/EL-BID/Agregador-de-indicadores/master/zscore.png?token=AI3Mx-FDwVxXvP5FOsvubMK5WsoscA8Tks5aA4TYwA%3D%3D)
 
-
+&nbsp;
 Una de las aplicaciones de esta normalizacion es comparar un conjunto de indicadores en un mismo gráfico. En el siguiente ejemplo se gráfico se muestran más de 1500 indicadores relacionados con género para 8 países para el 2014. En el gráfico se puede ver que Somalia e iraq tienen muchos más indicadores debajo de la media que el resto de países.
 
+&nbsp;
 ![](https://plot.ly/~arcuellar88/9.png)
+&nbsp;
 
 El paso a paso de este ejemplo lo pueden ver en [/ejemplos/ranking_plot.R](https://github.com/EL-BID/Agregador-de-indicadores/blob/master/examples/ranking_plot.R)
+
+
+#### 3. Cache
+
+Para mejorar el desempenño de la herramienta, esta cuenta con una pequeña base de datos de los metadatos de los indicadores que llamamos caché. Esta fue actualizada por última vez el 1 de Noviembre del 2017. Para utilizar una versión más reciente se puede utilizar el siguiente código:
+
+```r
+library(agregadorindicadores)
+
+# Descargamos un nuevo cache en inglés
+cache <- ai_cache(lang='en') 
+
+# Buscamos indicadores utilizando el cache
+df<-ind_search(pattern="poverty", cache=cache)
+```
+
+Para ver los datos disponibles en el caché se utiliza el siguiente código
+
+```r
+library(agregadorindicadores)
+str(ai_cachelist, max.level = 1)
+List of 3
+ $ countries_wb :'data.frame':	304 obs. of  14 variables:
+ $ countries_idb:'data.frame':	26 obs. of  11 variables:
+ $ indicators   :'data.frame':	19496 obs. of  11 variables:
+```
 
 ### Guía de instalación
 ---
@@ -160,41 +191,41 @@ En la pestaña Build-> 'Install and Restart'
 #### Dependencias
 El agregador de indicadores utiliza las siguientes librerias de R:
 
-   dplyr, tidyr, sqldf gdata se utilizan para manipular los datos (merge, join, agregar columnas, filtrar, etc.)
-    wbstats,WDI se utilizan para conectarse con el API del Banco Mundial 
+   + dplyr, tidyr, sqldf gdata se utilizan para manipular los datos (merge, join, agregar   columnas, filtrar, etc.)
+   + wbstats,WDI se utilizan para conectarse con el API del Banco Mundial 
     httr, jsonlite se utilizan para leer los resultados del llamodo a los distintos APIs    
 
 Adicionalmente se utiliza otras librerias de github: 
 
-   'arcuellar88/iadbstats' para conectarse con el API del Banco Interamericano de Desarrollo   https://github.com/arcuellar88/iadbstats
-      'arcuellar88/govdata360R' para conectarse con el API govdata360 del banco Mundial   https://github.com/arcuellar88/govdata360R
+   + 'arcuellar88/iadbstats' para conectarse con el API del Banco Interamericano de Desarrollo   https://github.com/arcuellar88/iadbstats
+   + 'arcuellar88/govdata360R' para conectarse con el API govdata360 del banco Mundial   https://github.com/arcuellar88/govdata360R
 
 
-### Cómo contribuir
----
-TO-DO
-Esta sección explica a desarrolladores cuáles son las maneras habituales de enviar una solicitud de adhesión de nuevo código (“pull requests”), cómo declarar fallos en la herramienta y qué guías de estilo se deben usar al escribir más líneas de código.
+### Cómo contribuir y Código de conducta 
 
-### Código de conducta 
----
-TO-DO
-El código de conducta establece las normas sociales, reglas y responsabilidades que los individuos y organizaciones deben seguir al interactuar de alguna manera con la herramienta digital o su comunidad. Es una buena práctica para crear un ambiente de respeto e inclusión en las contribuciones al proyecto. La plataforma Github premia y ayuda a los repositorios dispongan de este archivo. Al crear CODE_OF_CONDUCT.md puedes empezar desde una plantilla sugerida por ellos. 
+[CONTRIBUTING link](https://github.com/EL-BID/Agregador-de-indicadores/blob/master/CONTRIBUTING.md)
 
 ### Autor/es
 ---
-Alejandro Rodríguez Cuéllar (https://github.com/arcuellar88)
+[Alejandro Rodríguez Cuéllar](https://github.com/arcuellar88)
 
 ### Licencia 
 ---
-GNU General Public License v3.0
+[GNU General Public License v3.0](https://github.com/EL-BID/Agregador-de-indicadores/blob/master/LICENSE)
 
 ### TO-DO
 1. Temas
 2. GovData360
-3. Documentation (cache)
-4. Quitar Warnings
+3. Quitar Warnings
 
-### Mejoras futuras
+### Ideas
 1. Agregar filtros a la búsqueda de indicadores
 2. Verificar duplicados entre distintas fuentes de información
 3. Mejorar el tiempo de carga par No Ceilings
+
+### Referencias
+
+Esta herramienta estaá basada en las siguientes dos herramientas:
+
++ [wbstats](https://github.com/GIST-ORNL/wbstats) de Jesse Piburn
++ [WDI](https://github.com/vincentarelbundock/WDI) de Vincent Arel-Bundock

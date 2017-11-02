@@ -67,7 +67,6 @@ load.WB.data <- function(pIndicators, pCountry = 'all', pStart=2010, pEnd=2015){
   suppressWarnings(suppressMessages(library(dplyr)))
   suppressWarnings(suppressMessages(library(tidyr)))
   
-  
   df_wb <- WDI::WDI(indicator = pIndicators, country = pCountry, start=pStart, end=pEnd)
   
   
@@ -134,7 +133,7 @@ load.WB.medatada<-function(lang = c("en", "es", "fr", "ar", "zh"))
   
   #Topics 
   df_wb_ind_topic<-df[,c("id","topics")]
-  df_wb_ind_topic<-unnest(df_wb_ind_topic,topics)
+  df_wb_ind_topic<-tidyr::unnest(df_wb_ind_topic,topics)
   df_wb_ind_topic<-df_wb_ind_topic[,c("id","id1")]
   colnames(df_wb_ind_topic)<-c("src_ind_id","topic_id")
   
