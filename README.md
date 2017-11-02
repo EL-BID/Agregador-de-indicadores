@@ -108,12 +108,7 @@ p <- ggplot(df, aes(x=fCountry, y=value,colour=fCountry,hover = indicator))  +
 p <- ggplotly(p)
 p
 ```
-
-<div>
-    <a href="https://plot.ly/~arcuellar88/13/" target="_blank" title="bid_two_ind" style="display: block; text-align: center;"><img src="https://plot.ly/~arcuellar88/13.png" alt="bid_two_ind" style="max-width: 100%;width: 600px;"  width="600" onerror="this.onerror=null;this.src='https://plot.ly/404.png';" /></a>
-    <script data-plotly="arcuellar88:13" src="https://plot.ly/embed.js" async></script>
-</div>
-
+![](https://plot.ly/~arcuellar88/13.png)
 
 
 
