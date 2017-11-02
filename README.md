@@ -66,7 +66,7 @@ Para mayor información sobre la descarga de datos de los indicadores ejecuta en
 ```
 #### 4. ggplot examples
 
-Plot indicator "Agricultural land (% of land area)" for 4 countries in 2014
+Plot one indicator "Agricultural land (% of land area)" for 4 countries in 2014
 ```r
 df<-ai(indicator = "AG.LND.AGRI.ZS", country = c("CO", "PE","ZA","US"), startdate = 2014)
 ```
@@ -79,10 +79,42 @@ p
 ```
 ![](https://plot.ly/~arcuellar88/11.png)
 
+Plot two indicators from two different sources for one country and five years
+
+```r
+df<-ai(indicator = c("NV.AGR.TOTL.ZS","LMW_403"), country = c("PE"), startdate = 2010)
+
+ay <- list(
+    tickfont = list(color = "red"),
+    overlaying = "y",
+    side = "right",
+    title = "% of GDP"
+  )
+  p <- plot_ly() %>%
+    add_lines(x = df[df$src_id_ind=="LMW_403",]$year, y = df[df$src_id_ind=="LMW_403",]$value, name = "GDP: (US$ mill.) - Numbers for Development") %>%
+    add_lines(x = df[df$src_id_ind=="NV.AGR.TOTL.ZS",]$year, y = df[df$src_id_ind=="NV.AGR.TOTL.ZS",]$value, name = "Agriculture, value added (% of GDP) -  World Bank", yaxis = "y2") %>%
+    layout(
+      title = "Comparación de dos indicadores", yaxis2 = ay,
+      xaxis = list(title="Year")
+    )
+    
+   p
+```
+
+```r
+df$fCountry <- factor(df$country)
+p <- ggplot(df, aes(x=fCountry, y=value,colour=fCountry,hover = indicator))  +
+  geom_point(shape=1) 
+p <- ggplotly(p)
+p
+```
+
+![](https://plot.ly/~arcuellar88/13.png)
+
 
 #### 3. Ranking de indicadores
 
-El agregador de indicadores ofrece una funcionalidad adicional para normalizar los indicadores y hacer un raking por país y por año. La normalizacioón consiste en comparar el valor del indicador de cada país contra la media y la desviación de ese mismo indicador para todos los países para cada año.
+El agregador de indicadores ofrece una funcionalidad adicional para normalizar los indicadores y hacer un raking por país y por año. La normalización consiste en comparar el valor del indicador de cada país contra la media y la desviación de ese mismo indicador para todos los países para cada año. Para cada indicador, país y año se calcula el zscore de la siguiente manera:
 
 ![](https://raw.githubusercontent.com/EL-BID/Agregador-de-indicadores/master/zscore.png?token=AI3Mx-FDwVxXvP5FOsvubMK5WsoscA8Tks5aA4TYwA%3D%3D)
 
