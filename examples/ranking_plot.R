@@ -1,15 +1,20 @@
+library(agregadorindicadores)
+
 #Get all the indicator related to gender= female
 ind<- ind_search(pattern = "female", c("gender"))
 
+# Optional: exclude World Bank indicators to speed up computation
+ind<-ind[ind$api!="World Bank",]
+
 #Download all the available data for those indicators 
-df<-ai(indicator = ind$src_id_ind, startdate=2014, enddate=2014)
+df<-ai(indicator = ind$src_id_ind, startdate=2013, enddate=2013)
 
 #Normalize data
 df_gender<- ai_normalize(data=df)
   
 #select only two countries to compare
 df_gender$fCountry <- factor(df_gender$country)
-df_gender_s <- subset(df_gender, country %in% c("Colombia", "Somalia", "Germany","Andorra","Canada","Iraq","Argentina") & year %in% 2014)
+df_gender_s <- subset(df_gender, country %in% c("Colombia", "Somalia", "Germany","Andorra","Canada","Iraq","Argentina") & year %in% 2013)
 
 # Graph
 library(plotly)

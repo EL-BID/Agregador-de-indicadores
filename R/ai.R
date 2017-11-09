@@ -29,9 +29,36 @@
 ai <- function(country = "all", indicator, startdate=2010, enddate=2015,
                lang = c("en", "es", "fr", "ar", "zh"), meta=TRUE,cache)
 {
-    if(length(indicator)>150) message("Por el número de indicadores, el procesamiento puede tardar unos minutos...") 
   
   if (missing(cache)) cache <- agregadorindicadores::ai_cachelist
+  
+  #validate date range
+  if(!(startdate <= enddate)){
+    stop('La fecha inicial debe ser menor o igual a la fecha final. startdate <= enddate')
+  }
+  
+  
+  #Validate Countries
+  if(!('all' %in% country)){
+   
+    countries_wb<-cache$countries_wb
+    
+    df_ct<-as.data.frame(country)
+    colnames(df_ct)<-"iso2c"
+    indicators<-sqldf::sqldf("select iso2c, iso3c from df_ct join countries_wb using(iso2c)")
+    if(nrow(indicators)==0)
+    {
+      stop("Los países requeridos no son válidos.")    
+    }
+   
+  }else{
+    country = 'all'
+  }
+  
+  
+  
+  
+  if(length(indicator)>150) message("Por el número de indicadores, el procesamiento puede tardar unos minutos...") 
   
   ind<-cache$indicators
   
@@ -39,53 +66,91 @@ ai <- function(country = "all", indicator, startdate=2010, enddate=2015,
   colnames(df_ind)<-"src_id_ind"
   indicators<-sqldf::sqldf("select src_id_ind,api from df_ind join ind using(src_id_ind)")
   
-  nr_df=1
+  nr_df=0
   df_list<-list()
   
-  #WB
+  #World Bank
   wb_ind<-indicators[indicators$api=="World Bank",]$src_id_ind
   if(length(wb_ind)>0)
   {
-    df_list[[nr_df]]<-load.WB.data(pIndicators = wb_ind, pCountry=country,pStart = startdate,pEnd=enddate)
-    nr_df=nr_df+1
+   df_temp<-load.WB.data(pIndicators = wb_ind, pCountry=country,pStart = startdate,pEnd=enddate)
+  
+   if(length(df_temp)>1)
+   {
+     nr_df=nr_df+1
+     df_list[[nr_df]]<-df_temp  
+   }
   }
   
-  #N4D
+  #Numbers for Development 
   n4d_ind<-indicators[indicators$api=="Numbers for Development",]$src_id_ind
   if(length(n4d_ind)>0)
   {
-    df_list[[nr_df]]<-load.N4D.data(pIndicators = n4d_ind, pCountry=country,pStart = startdate,pEnd=enddate, cache=cache)
-    nr_df=nr_df+1
+    tryCatch(
+      {
+      df_temp<-load.N4D.data(pIndicators = n4d_ind, pCountry=country,pStart = startdate,pEnd=enddate, cache=cache)
+      if(length(df_temp)>1)
+      {
+        nr_df=nr_df+1
+        df_list[[nr_df]]<-df_temp 
+      }
+    }, warning = function(w) { 
+      #do nothing
+    }, error = function(e) {
+      #do nothing
+    }, finally = {
+      #do nothing
+    })
+    
+    
+    
   }
   
-  #NCD
+  #No Ceilings 
   nc_ind<-indicators[indicators$api=="No Ceilings",]$src_id_ind
   if(length(nc_ind)>0)
   {
-    df_list[[nr_df]]<-load.NC.data(pIndicators = nc_ind, pCountry=country,pStart = startdate,pEnd=enddate, cache=cache)
-    nr_df=nr_df+1
-  }
-  
-  #360
-  nc_ind<-indicators[indicators$api=="Govdata360",]$src_id_ind
-  if(length(nc_ind)>0)
-  {
-    df_list[[nr_df]]<-load.360.data(pIndicators = nc_ind, pCountry=country,pStart = startdate,pEnd=enddate, cache=cache)
-    nr_df=nr_df+1
-  }
-  
-  df<-dplyr::bind_rows(df_list)
-  
-  if(meta)
-  {
-    df<-sqldf::sqldf("select * from df join ind using(src_id_ind)")
+    df_temp<-load.NC.data(pIndicators = nc_ind, pCountry=country,pStart = startdate,pEnd=enddate, cache=cache)
     
-    #remove rows where indicator name=NA
-    df <- df[!is.na(df$indicator),]
-    
+    if(length(df_temp)>1)
+    {
+      nr_df=nr_df+1
+      df_list[[nr_df]]<-df_temp  
+    }
   }
   
-  df
+  #Govdata360
+  g360_ind<-indicators[indicators$api=="Govdata360",]$src_id_ind
+  if(length(g360_ind)>0)
+  {
+    df_temp<-load.360.data(pIndicators = g360_ind, pCountry=country,pStart = startdate,pEnd=enddate, cache=cache)
+    if(length(df_temp)>1)
+    {
+      nr_df=nr_df+1
+      df_list[[nr_df]]<-df_temp  
+    }
+  }
+  
+  if(nr_df>0)
+  {
+    df<-dplyr::bind_rows(df_list)
+    
+    if(meta)
+    {
+      df<-sqldf::sqldf("select * from df join ind using(src_id_ind)")
+      
+      #remove rows where indicator name=NA
+      df <- df[!is.na(df$indicator),]
+      
+    }
+    
+    return(df)
+  }
+  else
+    {
+      message("No se encontraron datos para la búsqueda solicitada")
+      return("No data")
+    }
 }
 
 ai_normalize<-function(data)

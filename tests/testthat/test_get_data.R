@@ -61,6 +61,65 @@ test_that("erros in range queries", {
 })
 
 
+test_that("Numbers for Development", {
+  
+df<-ai(indicator = "SOC_046", startdate=2014, enddate=2014)
+expect_equal(min(df$year), 2014)
+expect_equal(max(df$year), 2014)
+expect_that(nrow(df), is_more_than(10))
+
+})
+
+test_that("World Bank", {
+  
+  df<-ai(indicator = "SL.UEM.TOTL.NE.ZS", startdate=2014, enddate=2014)
+  expect_equal(min(df$year), 2014)
+  expect_equal(max(df$year), 2014)
+  expect_that(nrow(df), is_more_than(140))
+  
+})
+
+test_that("No Ceilings", {
+  
+  df<-ai(indicator = "CONTFEHQ", startdate=2002, enddate=2014)
+  expect_that(min(df$year), is_more_than(2001))
+  expect_that(max(df$year), is_less_than(2015))
+  expect_that(nrow(df), is_more_than(100))
+  
+})
+
+test_that("Gov Data 360", {
+  
+  df<-ai(indicator = "27870", startdate=2012, enddate=2014)
+  expect_that(min(df$year), is_more_than(2011))
+  expect_that(max(df$year), is_less_than(2015))
+  expect_that(nrow(df), is_more_than(100))
+  
+})
 
 
+test_that("Wrong indicators", {
+  
+  df<-ai(indicator = "asaxadsa", startdate=2012, enddate=2014)
+  expect_equal(df, "No data")
+  
+  df<-ai(indicator = c("AXA","asdasd"), startdate=2012, enddate=2014)
+  expect_equal(df, "No data")
 
+})
+
+test_that("Wrong countries", {
+  
+  expect_error(ai(indicator = "SL.UEM.TOTL.NE.ZS", country = "XASDA",startdate=2012, enddate=2014))
+  
+  expect_error(ai(indicator = "SL.UEM.TOTL.NE.ZS", country = c("xsa","@asda"),startdate=2012, enddate=2014))
+  
+  #Numbers for Development Unexpected country
+  df<-ai(indicator = "SOC_046", country = c("US"),startdate=2012, enddate=2014)
+  expect_equal(df, "No data")
+  
+  df<-ai(indicator = "SOC_046", country = c("US","AR"),startdate=2012, enddate=2014)
+  expect_that(min(df$year), is_more_than(2011))
+  expect_that(max(df$year), is_less_than(2015))
+  expect_that(nrow(df), is_more_than(1))
+})

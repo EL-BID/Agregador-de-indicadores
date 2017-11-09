@@ -78,7 +78,7 @@ load.NC.data <- function(pIndicators=c("CONTFEHQ"),pStart=2010,pEnd=2015, pCount
   df_ncd<-sqldf::sqldf(sql)
   
   #Filter Countries
-  if(as.character(pCountry)!='all')
+  if(!('all' %in% pCountry))
   {
     df_ct<-as.data.frame(pCountry)
     colnames(df_ct)<-"iso2"

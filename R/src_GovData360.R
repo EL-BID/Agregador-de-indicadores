@@ -90,7 +90,7 @@ load.360.data <- function(pIndicators, pCountry = 'ALL', pStart=2010, pEnd=2015,
   pCountry=toupper(pCountry)
   
   #Transform iso2 to iso3
-  if(as.character(pCountry)!='ALL')
+  if(!('ALL' %in% pCountry))
   {
     pCountry<-as.data.frame(pCountry)
     colnames(pCountry)<-c("iso3")
@@ -119,6 +119,7 @@ load.360.data <- function(pIndicators, pCountry = 'ALL', pStart=2010, pEnd=2015,
   df_360<-sqldf::sqldf(sql)
   
   df_360$year<-as.numeric(df_360$year)
+  df_360$src_id_ind<-as.character( df_360$src_id_ind)
   
   return(df_360)
   

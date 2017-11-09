@@ -59,6 +59,10 @@ load.N4D.data <- function(pIndicators, pCountry = 'all', pStart=2010, pEnd=2015,
     colnames(pCountry)<-c("WB2code")
     
     pCountry<-as.vector(sqldf::sqldf("select CountryCode from pCountry join df_iadb_ct using (WB2code)")$CountryCode)
+  
+    if(length(pCountry)==0){
+      stop("Los países requeridos no son válidos.")  
+    }
   }
   
   #Download data from indicators

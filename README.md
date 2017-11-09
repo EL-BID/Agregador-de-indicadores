@@ -213,14 +213,10 @@ Adicionalmente se utiliza otras librerias de github:
 ---
 [GNU General Public License v3.0](https://github.com/EL-BID/Agregador-de-indicadores/blob/master/LICENSE)
 
-### TO-DO
-1. Temas
-2. Quitar Warnings
-
 ### Ideas
 1. Agregar filtros a la búsqueda de indicadores
 2. Verificar duplicados entre distintas fuentes de información
-3. Mejorar el tiempo de carga par No Ceilings
+3. Mejorar el tiempo de carga par World Bank (reduciendo el número de llamadas al api)[link](https://groups.google.com/forum/#!topic/world-bank-api/n0gOPdoh64o) -
 
 ### Referencias
 
