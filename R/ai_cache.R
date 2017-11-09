@@ -85,7 +85,8 @@ ai_cache <- function(lang = c("en", "es", "fr", "ar", "zh")) {
   cache_list <- list(
                      "countries_wb" = wbstats::wbcountries(lang),
                      "countries_idb" = iadbstats::iadbstats.countries(),
-                     "indicators" = meta_indicators(lang = lang)
+                     "indicators" = meta_indicators(lang = lang),
+                     "no_ceilings"= agregadorindicadores::cache.NC.data()
                      #"sources" = wbsources(lang = lang),
                      #"datacatalog" = wbdatacatalog(), # does not take lang input
                      #"topics" = wbtopics(lang = lang),

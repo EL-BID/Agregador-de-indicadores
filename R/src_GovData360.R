@@ -78,13 +78,17 @@ load.360.medatada<-function(lang = c("en", "es", "fr", "ar", "zh"))
 #' 
 #' load.360.data(pIndicators=c("27870","27873"),pStart=2013,pEnd=2015, pCountry='all')
 #' @export
-load.360.data <- function(pIndicators, pCountry = 'ALL', pStart=2010, pEnd=2015){
+load.360.data <- function(pIndicators, pCountry = 'ALL', pStart=2010, pEnd=2015, cache){
+  
+  if (missing(cache)) cache <- agregadorindicadores::ai_cachelist
   
   #Format Countries
+
   #load countries
-  df_wb_ct<-agregadorindicadores::ai_cachelist$countries_wb
+  df_wb_ct<-cache$countries_wb
   
   pCountry=toupper(pCountry)
+  
   #Transform iso2 to iso3
   if(as.character(pCountry)!='ALL')
   {
@@ -100,7 +104,8 @@ load.360.data <- function(pIndicators, pCountry = 'ALL', pStart=2010, pEnd=2015)
    
   dr<-paste0(pStart:pEnd,collapse = ",")
  
-  df_360 <- govdata360R::gov360stats.list(pIndicators = pIndicators, pCountry = pCountry,dateRange =dr )
+  
+  df_360 <- suppressWarnings(govdata360R::gov360stats.list(pIndicators = pIndicators, pCountry = pCountry,dateRange =dr ))
   
   
   #Change to iso2 country code
@@ -112,6 +117,8 @@ load.360.data <- function(pIndicators, pCountry = 'ALL', pStart=2010, pEnd=2015)
                  df_360.value as value 
                  from df_360 join df_wb_ct on df_360.country=df_wb_ct.iso3c")
   df_360<-sqldf::sqldf(sql)
+  
+  df_360$year<-as.numeric(df_360$year)
   
   return(df_360)
   

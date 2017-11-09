@@ -21,7 +21,6 @@
 #' Download Data from the World Bank data catalog using an API
 #'
 #' This function downloads the requested information using the World Bank API
-#'
 #' @param country Character vector of country or region codes. Default value is special code of \code{all}.
 #'  Other permissible values are codes in the following fields from the \code{\link{ai_cachelist}} \code{countries_idb}
 #'  data frame.  \code{iso2c}
@@ -56,20 +55,12 @@
 #' @export
 load.WB.data <- function(pIndicators, pCountry = 'all', pStart=2010, pEnd=2015){
   
-  #General indicators and Global Findex Data are included in this dataframe
+  require(WDI)
+  require(dplyr)
   
-  ############################################
-  #                                          #
-  #       Download indicator data            #
-  #                                          #
-  ############################################
-  suppressWarnings(suppressMessages(library(WDI)))
-  suppressWarnings(suppressMessages(library(dplyr)))
-  suppressWarnings(suppressMessages(library(tidyr)))
-  
-  df_wb <- WDI::WDI(indicator = pIndicators, country = pCountry, start=pStart, end=pEnd)
-  
-  
+  #Download indicator data 
+  df_wb <- suppressWarnings(WDI::WDI(indicator = pIndicators, country = pCountry, start=pStart, end=pEnd))
+
   #Rename country code
   df_wb <- df_wb %>% dplyr::rename (iso2=iso2c)
   
@@ -79,20 +70,14 @@ load.WB.data <- function(pIndicators, pCountry = 'all', pStart=2010, pEnd=2015){
     #Sort Columns
     df_cn<-c("iso2","country","year",colnames(df_wb)[3])
     
-    #df<-ai(indicator = ind[1:1000,]$src_id_ind, startdate=2014, enddate=2014)
-    
     df_wb<-df_wb[,as.vector(df_cn)]
   }
   
   #Reshape wide to long and paste
-  df_wb <- df_wb %>% gather('src_id_ind', 'value', 4:length(df_wb))
+  df_wb <- df_wb %>% tidyr::gather('src_id_ind', 'value', 4:length(df_wb))
   
   #Remove rows where value=NA
   df_wb <- df_wb[!is.na(df_wb$value),]
-  
-  detach("package:WDI", unload=TRUE)  
-  detach("package:dplyr", unload=TRUE) 
-  detach("package:tidyr", unload=TRUE) 
   
   return(df_wb)
   

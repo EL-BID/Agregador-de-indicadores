@@ -163,8 +163,8 @@ Para utilizar la librería en R se debe ejecutar el siguiente codigo:
 ```r
 install.packages('devtools')
 library(devtools)
-install_github('arcuellar88/iadbstats')
-install_github("mrpsonglao/data360r")
+install_github('EL-BID/Libreria-R-Numeros-para-el-Desarrollo')
+install_github("arcuellar88/govdata360R")
 install_github('EL-BID/Agregador-de-indicadores')
 library(agregadorindicadores)
 ```
@@ -175,7 +175,7 @@ Si el repositorio 'EL-BID/Agregador-de-indicadores' es privado:
 ```r
 install.packages('devtools')
 library(devtools)
-install_github('arcuellar88/iadbstats')
+install_github('EL-BID/Libreria-R-Numeros-para-el-Desarrollo')
 install_github("arcuellar88/govdata360R")
 ```
 
@@ -197,7 +197,7 @@ El agregador de indicadores utiliza las siguientes librerias de R:
 
 Adicionalmente se utiliza otras librerias de github: 
 
-   + 'arcuellar88/iadbstats' para conectarse con el [API del Banco Interamericano de Desarrollo](https://github.com/arcuellar88/iadbstats)
+   + 'arcuellar88/iadbstats' para conectarse con el [API del Banco Interamericano de Desarrollo](https://github.com/EL-BID/Libreria-R-Numeros-para-el-Desarrollo)
    + 'arcuellar88/govdata360R' para conectarse con el [API govdata360 del Banco Mundial](https://github.com/arcuellar88/govdata360R)
 
 

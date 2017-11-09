@@ -29,6 +29,7 @@
 ai <- function(country = "all", indicator, startdate=2010, enddate=2015,
                lang = c("en", "es", "fr", "ar", "zh"), meta=TRUE,cache)
 {
+    if(length(indicator)>150) message("Por el número de indicadores, el procesamiento puede tardar unos minutos...") 
   
   if (missing(cache)) cache <- agregadorindicadores::ai_cachelist
   
@@ -53,7 +54,7 @@ ai <- function(country = "all", indicator, startdate=2010, enddate=2015,
   n4d_ind<-indicators[indicators$api=="Numbers for Development",]$src_id_ind
   if(length(n4d_ind)>0)
   {
-    df_list[[nr_df]]<-load.N4D.data(pIndicators = n4d_ind, pCountry=country,pStart = startdate,pEnd=enddate)
+    df_list[[nr_df]]<-load.N4D.data(pIndicators = n4d_ind, pCountry=country,pStart = startdate,pEnd=enddate, cache=cache)
     nr_df=nr_df+1
   }
   
@@ -61,7 +62,7 @@ ai <- function(country = "all", indicator, startdate=2010, enddate=2015,
   nc_ind<-indicators[indicators$api=="No Ceilings",]$src_id_ind
   if(length(nc_ind)>0)
   {
-    df_list[[nr_df]]<-load.NC.data(pIndicators = nc_ind, pCountry=country,pStart = startdate,pEnd=enddate)
+    df_list[[nr_df]]<-load.NC.data(pIndicators = nc_ind, pCountry=country,pStart = startdate,pEnd=enddate, cache=cache)
     nr_df=nr_df+1
   }
   
@@ -69,7 +70,7 @@ ai <- function(country = "all", indicator, startdate=2010, enddate=2015,
   nc_ind<-indicators[indicators$api=="Govdata360",]$src_id_ind
   if(length(nc_ind)>0)
   {
-    df_list[[nr_df]]<-load.360.data(pIndicators = nc_ind, pCountry=country,pStart = startdate,pEnd=enddate)
+    df_list[[nr_df]]<-load.360.data(pIndicators = nc_ind, pCountry=country,pStart = startdate,pEnd=enddate, cache=cache)
     nr_df=nr_df+1
   }
   

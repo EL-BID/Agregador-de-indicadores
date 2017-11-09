@@ -46,22 +46,20 @@
 #' load.NC.data(pIndicators=c("SOC_046"))
 #' pIndicators=c("SOC_046",pStart=2013,pEnd=2015, pCountry='all')
 #' @export
-load.N4D.data <- function(pIndicators, pCountry = 'all', pStart=2010, pEnd=2015){
+load.N4D.data <- function(pIndicators, pCountry = 'all', pStart=2010, pEnd=2015, cache){
   
-  df_iadb_ct<-iadbstats::iadbstats.countries()
+  if (missing(cache)) cache <- agregadorindicadores::ai_cachelist
   
-  suppressWarnings(suppressMessages(library(dplyr)))
-  suppressWarnings(suppressMessages(library(tidyr)))
+  df_iadb_ct<-cache$countries_idb
   
   #Transform ISO2 to IDB code
-  if(as.character(pCountry)!='all')
+  if(!('all' %in% pCountry))
   {
     pCountry<-as.data.frame(pCountry)
     colnames(pCountry)<-c("WB2code")
     
     pCountry<-as.vector(sqldf::sqldf("select CountryCode from pCountry join df_iadb_ct using (WB2code)")$CountryCode)
   }
-  
   
   #Download data from indicators
   df<-iadbstats::iadbstats.list(indicatorCodes=pIndicators,country = pCountry)
@@ -77,14 +75,13 @@ load.N4D.data <- function(pIndicators, pCountry = 'all', pStart=2010, pEnd=2015)
                  df.AggregatedValue as value 
                  from df join df_iadb_ct using (CountryCode)
                  where df.year>= %s and df.year<= %s", pStart, pEnd)
+  
   df_n4d<-sqldf::sqldf(sql)
   
   df_n4d$year<-as.numeric(df_n4d$year)
   df_n4d$value<-as.numeric(df_n4d$value)
   
-  detach("package:dplyr", unload=TRUE) 
-  detach("package:tidyr", unload=TRUE) 
-  
+
   return(df_n4d)
   
 }
