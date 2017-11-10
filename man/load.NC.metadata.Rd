@@ -4,7 +4,11 @@
 \alias{load.NC.metadata}
 \title{Download updated indicator metadata from Numbers for Development (N4D) API}
 \usage{
-load.NC.metadata()
+load.NC.metadata(lang = c("en", "es"))
+}
+\arguments{
+\item{lang}{Language in which to return the results. If \code{lang} is unspecified,
+english is the default. This source is only available in english. The only column supports other languages is the topic}
 }
 \value{
 A data frame of available indicators with related metadata

@@ -1,0 +1,26 @@
+id_topic_wb,topic_wb_en,topic_wb_es,topic_n4d_en,topic_n4d_es,topic_ncd_en,topic_ncd_es,id_topic,topic_en,topic_es
+1,Agriculture & Rural Development,,Agriculture,Agricultura,,,1,Agriculture & Rural Development,Agricultura
+2,Aid Effectiveness,,,,,,2,Aid Effectiveness,Eficacia de la ayuda
+3,Economy & Growth,,Economy,Economía,Economy,Economy,3,Economy & Growth,Economía
+4,Education,,,,Education,Education,4,Education,Educación
+5,Energy & Mining,,,,,,5,Energy & Mining,Energía
+6,Environment,,,,,,6,Environment,Medio Ambiente
+7,Financial Sector,,Finance,Finanzas,,,7,Financial Sector,Finanzas
+8,Health,,,,Health,Health,8,Health,Salud
+9,Infrastructure,,Infrastructure,Infraestructura,,,9,Infrastructure,Infraestructura
+10,Social Protection & Labor,,,,,,10,Social Protection & Labor,Protección Social y Laboral
+11,Poverty,,,,,,11,Poverty,Pobreza
+12,Private Sector,,,,,,12,Private Sector,Sector Privado
+13,Public Sector,,Public Management,Gestión Pública,,,13,Public Sector,Gestión Pública
+14,Science & Technology,,,,,,14,Science & Technology,Ciencia y Tecnología
+15,Social Development,,Social Outlook,Panorama Social,,,15,Social Development,Desarrollo Social
+16,Urban Development,,,,,,16,Urban Development,Desarrollo Urbano
+17,Gender,,,,,,17,Gender,Género
+18,Millenium development goals,,,,,,18,Millenium development goals,Metas del milenio
+19,Climate Change,,,,,,19,Climate Change,Cambio Climático
+20,External Debt,,,,,,20,External Debt,Deuda Externa
+21,Trade,,Global Integration,Integración Mundial,,,21,Trade,Comercio
+,,,Disaster Risk Management,Gestión de Riesgo de Desastres,,,22,Disaster Risk Management,Gestión de Riesgo de Desastres
+,,,,,Leadership,Leadership,23,Leadership,Liderazgo
+,,,,,Security,Security,24,Security,Seguridad
+,,,,,Communication,Communication,25,Communication,Comunicación

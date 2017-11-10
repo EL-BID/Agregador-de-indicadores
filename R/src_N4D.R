@@ -44,7 +44,7 @@
 #'
 #'  @examples
 #' load.NC.data(pIndicators=c("SOC_046"))
-#' pIndicators=c("SOC_046",pStart=2013,pEnd=2015, pCountry='all')
+#' load.N4D.data(pIndicators=c("SOC_046"),pStart=2013,pEnd=2015, pCountry='all')
 #' @export
 load.N4D.data <- function(pIndicators, pCountry = 'all', pStart=2010, pEnd=2015, cache){
   
@@ -111,9 +111,16 @@ load.N4D.data <- function(pIndicators, pCountry = 'all', pStart=2010, pEnd=2015,
 #' @export
 load.N4D.metadata<-function(lang = c("en", "es"))
 {
+  lang <- match.arg(lang)
+  
   df<-iadbstats::iadbmsearch('ALL',lang = lang)
   
-  df_n4d_metada<-schemaMatch(df,api="Numbers for Development",id_api="n4d")
+  names(df)[names(df) == "TopicName"] <- 'topic_id'
+  
+  df_n4d_metada<-topicMatch(df,lang = lang,id_api="n4d")
+  
+  df_n4d_metada<-schemaMatch(df_n4d_metada,api="Numbers for Development",id_api="n4d")
+
   
   df_n4d_metada
 }

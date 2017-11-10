@@ -96,36 +96,43 @@ load.WB.data <- function(pIndicators, pCountry = 'all', pStart=2010, pEnd=2015){
 #' \itemize{
 #' \item \code{en}: English
 #' \item \code{es}: Spanish
-#' \item \code{fr}: French
-#' \item \code{ar}: Arabic
-#' \item \code{zh}: Mandarin
 #' }
 #' @examples
 #' # default is english. To specific another language use argument lang
 #' load.WB.medatada(lang = "es")
 #' @export
-load.WB.medatada<-function(lang = c("en", "es", "fr", "ar", "zh"))
+load.WB.medatada<-function(lang = c("en", "es"))
 {
-  #------------------------------------------#
-  #       Download metadata                  #
-  #------------------------------------------#
+  #Select language
+  lang <- match.arg(lang)
   
+  #Download metadata
   url<-paste0("http://api.worldbank.org/",lang,"/indicators?format=json&per_page=20000")
   return_get <- httr::GET(url)
   return_json <- httr::content(return_get, as = "text")
   return_list <- jsonlite::fromJSON(return_json,  flatten = TRUE)
   df<-as.data.frame(return_list)
+  df$per_page<-as.character(df$per_page)
   
   #Topics 
   df_wb_ind_topic<-df[,c("id","topics")]
   df_wb_ind_topic<-tidyr::unnest(df_wb_ind_topic,topics)
-  df_wb_ind_topic<-df_wb_ind_topic[,c("id","id1")]
-  colnames(df_wb_ind_topic)<-c("src_ind_id","topic_id")
+  df_wb_ind_topic<-df_wb_ind_topic[,c("id","value")]
+  colnames(df_wb_ind_topic)<-c("src_id_ind","topic_id")
+  df_wb_ind_topic$topic_id<-trimws(df_wb_ind_topic$topic_id)
+  
+  df_wb_ind_topic<-topicMatch(df_wb_ind_topic,lang,id_api="wb")
+  df_wb_ind_topic$topic<-as.character(df_wb_ind_topic$topic)
+  
+  df<-df[c(names(df)[names(df) != "topics"])]
+  
+  df<-sqldf::sqldf("select page,pages,per_page,total,id,name,sourceNote,sourceOrganization,`source.id`,`source.value`, 
+                   group_concat(df_wb_ind_topic.topic) as topic_id 
+                   from df left join df_wb_ind_topic on id=src_id_ind 
+                   group by page,pages,per_page,total,id,name,sourceNote,
+                   sourceOrganization,`source.id`,`source.value`")
   
   df_wb_metada<-schemaMatch(df,api="World Bank",id_api="wb")
-  
-  # create a list with required components
-  s <- list(topics = df_wb_ind_topic, ind_metadata=df_wb_metada, src = "wb")
   
   df_wb_metada
 }

@@ -38,7 +38,7 @@ meta_indicators <- function(lang = c("en", "es", "fr", "ar", "zh")) {
   ncd<-load.NC.metadata()
   
   #360
-  gov360<-load.360.medatada()
+  gov360<-load.360.metadata()
   
   #Merge all indicators
   indicators_df<-rbind(wb,n4d,ncd,gov360)

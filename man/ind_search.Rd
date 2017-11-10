@@ -60,4 +60,6 @@ ind_search(pattern = "Numbers for Development", c("api"))
 # Get all Rural indicators
 ind_search(pattern = "rural", c("area"))
 
+# Search by topic 
+df<-ind_search(pattern = "Health", fields="topic")
 }

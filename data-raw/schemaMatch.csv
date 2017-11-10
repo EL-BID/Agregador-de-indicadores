@@ -7,7 +7,7 @@
 "wb","name","keep","indicator",2
 "wb","sourceNote","keep","ind_description",3
 "wb","sourceOrganization","keep","source",4
-"wb","topics","rm","",
+"wb","topic_id","keep","topic",8
 "wb","source.id","keep","src_id_dataset",5
 "wb","source.value","keep","dataset",6
 "wb","","add","uom",7
@@ -20,7 +20,7 @@
 "n4d","IndicatorSynonym","rm","",
 "n4d","IndicatorSource","keep","source",4
 "n4d","TopicID","rm","",
-"n4d","TopicName","rm","",
+"n4d","topic","keep","topic",8
 "n4d","SubTopicName","rm","",
 "n4d","AggregationMethod","rm","",
 "n4d","BasePeriod","rm","",
@@ -36,7 +36,7 @@
 "n4d","GeneralComment","rm","",
 "n4d","LimitationException","rm","",
 "n4d","SourceComment","rm","",
-"ncd","theme","rm","","",
+"ncd","topic","keep","topic",8
 "ncd","series","keep","src_id_ind",1
 "ncd","name","keep","indicator",2
 "ncd","unit","keep","uom",7
@@ -64,5 +64,5 @@
 "360","periodicity","rm","",
 "360","dateRange","rm","",
 "360","","add","source",4
-
+"360","","add","topic",8
 

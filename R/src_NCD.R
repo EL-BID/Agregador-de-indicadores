@@ -93,17 +93,18 @@ load.NC.data <- function(pIndicators=c("CONTFEHQ"),pStart=2010,pEnd=2015, pCount
 }
 
 #' Download updated indicator metadata from Numbers for Development (N4D) API
-#'
+#' @param lang Language in which to return the results. If \code{lang} is unspecified,
+#' english is the default. This source is only available in english. The only column supports other languages is the topic
 #' @return A data frame of available indicators with related metadata
 #' @note The only language supported for this source of information is english
 #' 
 #' @examples 
 #' load.NC.metadata()
 #' @export
-load.NC.metadata<-function()
+load.NC.metadata<-function(lang = c("en", "es"))
 {
-  
-  #suppressWarnings(suppressMessages(library(dplyr)))
+  #Select Language
+  lang <- match.arg(lang)
   
   #Download Metadata
   url_meta="https://raw.githubusercontent.com/fathominfo/noceilings-data/master/indicators.csv"
@@ -112,9 +113,12 @@ load.NC.metadata<-function()
   #Filter World Bank
   df_nc_meta<-df_nc_meta %>% filter(!grepl("World Bank", source))
   
-  df_nc_meta<-schemaMatch(df_nc_meta,api="No Ceilings",id_api="ncd")
+  #Match topic names
+  names(df_nc_meta)[names(df_nc_meta) == "theme"] <- 'topic_id'
+  df_nc_meta<-topicMatch(df_nc_meta,lang = lang,id_api="ncd")
   
-  #detach("package:dplyr", unload=TRUE) 
+  #Match schema: column names and order
+  df_nc_meta<-schemaMatch(df_nc_meta,api="No Ceilings",id_api="ncd")
   
   return(df_nc_meta)
   
@@ -123,8 +127,8 @@ load.NC.metadata<-function()
 #' @export
 cache.NC.data <- function(){
   
-  #suppressWarnings(suppressMessages(library(dplyr)))
-  #suppressWarnings(suppressMessages(library(tidyr)))
+  
+  suppressWarnings(suppressMessages(require(dplyr)))
 
   # Download and unzip data
   downloader::download("https://github.com/fathominfo/noceilings-data/archive/master.zip", dest="dataset.zip", mode="wb")
@@ -158,7 +162,7 @@ cache.NC.data <- function(){
     temp$series = rep(fname, nrow(temp)) # creates a variable with the indicator name
     
     #put in the appropriate structure (from wide to long form)
-    temp <- gather(temp, year, value, 2:(length(names(temp))-1)) %>%  filter(value != "")
+    temp <- tidyr::gather(temp, year, value, 2:(length(names(temp))-1)) %>%  filter(value != "")
     
     #remove rows that have NAs in value variable
     temp <- temp[!is.na(temp$value),]

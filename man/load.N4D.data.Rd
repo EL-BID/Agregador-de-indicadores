@@ -4,9 +4,13 @@
 \alias{load.N4D.data}
 \title{Download Data from the Numbers for Development (N4D)}
 \usage{
-load.N4D.data(pIndicators, pCountry = "all", pStart = 2010, pEnd = 2015)
+load.N4D.data(pIndicators, pCountry = "all", pStart = 2010, pEnd = 2015,
+  cache)
 }
 \arguments{
+\item{cache}{List of data frames returned from \code{\link{ai_cache}}. If omitted,
+\code{\link{ai)_cachelist}} is used}
+
 \item{country}{Character vector of country or region codes. Default value is special code of \code{all}.
 Other permissible values are codes in the following fields from the \code{\link{ai_cachelist}} \code{countries_idb}
 data frame.  \code{iso2c}}
@@ -18,9 +22,6 @@ the result of \code{\link{ai_search}}}
 \item{startdate}{Numeric. Year (four digit) of the start of the requested date range.}
 
 \item{enddate}{Numeric. Year (four digit) of the end of the requested date range.}
-
-\item{cache}{List of data frames returned from \code{\link{ai_cache}}. If omitted,
-\code{\link{ai)_cachelist}} is used}
 
 \item{lang}{Language in which to return the results. If \code{lang} is unspecified,
 english is the default.}
@@ -47,5 +48,5 @@ Not all data returns have support for langauges other than english. If the speci
 
  @examples
 load.NC.data(pIndicators=c("SOC_046"))
-pIndicators=c("SOC_046",pStart=2013,pEnd=2015, pCountry='all')
+load.N4D.data(pIndicators=c("SOC_046"),pStart=2013,pEnd=2015, pCountry='all')
 }

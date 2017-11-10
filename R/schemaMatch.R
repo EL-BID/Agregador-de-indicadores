@@ -1,7 +1,8 @@
 schemaMatch<-function(df,api="World Bank",id_api="wb")
 {
   #Indicator data
-  schema<-read.csv("./data/schemaMatch.csv")
+  schema<-agregadorindicadores::schema
+    
   df<-df[,as.vector(schema[schema$action == "keep" & schema$source==id_api, ]$column)]
   
   #Add missing columns
@@ -25,4 +26,25 @@ schemaMatch<-function(df,api="World Bank",id_api="wb")
   
   return(df)
     
+}
+
+topicMatch<-function(df,lang = c("en", "es"),id_api="wb")
+{
+  #Indicator data
+  topics<-agregadorindicadores::topics
+  
+  t<-paste0("topic_",lang)
+  t_ext<-paste0("topic_",id_api,"_",lang)
+  df_topic<-topics[c(t,t_ext)]
+  
+  sql <- sprintf("select * from df left join df_topic on topic_id=%s",t_ext)
+  
+  df_s<-sqldf::sqldf(sql)
+  
+  df<-df_s[c(names(df)[names(df) != "topic_id"],t)]
+  
+  names(df)[names(df) == t] <- 'topic'
+  
+  return(df)
+  
 }

@@ -45,6 +45,8 @@
 #' # Get all Rural indicators
 #' ind_search(pattern = "rural", c("area"))
 #' 
+#' # Search by topic 
+#' df<-ind_search(pattern = "Health", fields="topic")
 #' @export
 ind_search <- function(pattern = "poverty", fields = c("indicator", "ind_description"), extra = FALSE, cache){
   

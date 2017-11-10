@@ -9,32 +9,18 @@
 
 
 #' Download updated indicator metadata from Govdata360 platform govdata360.worldbank.org
+#' Only is english. 
+#' @return A data frame with the metadata of all the indicators of Govdata360 
 #'
-#' @param lang Language in which to return the results. If \code{lang} is unspecified,
-#' english is the default.
-#'
-#' @return A data frame of available indicators with related metadata
-#'
-#' @note Not all data returns have support for langauges other than english. If the specific return
-#' does not support your requested language by default it will return \code{NA}.
-#' The options for \code{lang} are:
-#' \itemize{
-#' \item \code{en}: English
-#' \item \code{es}: Spanish
-#' \item \code{fr}: French
-#' \item \code{ar}: Arabic
-#' \item \code{zh}: Mandarin
-#' }
 #' @examples
-#' # default is english. To specific another language use argument lang
-#' load.WB.medatada(lang = "es")
+#' # 
+#' load.360.medatada()
 #' @export
-load.360.medatada<-function(lang = c("en", "es", "fr", "ar", "zh"))
+load.360.metadata<-function()
 {
   #------------------------------------------#
   #       Download metadata                  #
   #------------------------------------------#
-  
   df <- govdata360R::gov360msearch()
   
   df_360_metada<-schemaMatch(df,api="Govdata360",id_api="360")
