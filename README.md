@@ -119,7 +119,7 @@ ay <- list(
 El agregador de indicadores ofrece una funcionalidad adicional para normalizar los indicadores y hacer un raking por país y por año. La normalización consiste en comparar el valor del indicador de cada país contra la media y la desviación de ese mismo indicador para todos los países para cada año. Para cada indicador, país y año se calcula el zscore de la siguiente manera:
 
 &nbsp;
-![](https://raw.githubusercontent.com/EL-BID/Agregador-de-indicadores/master/zscore.png?token=AI3Mx-FDwVxXvP5FOsvubMK5WsoscA8Tks5aA4TYwA%3D%3D)
+![](https://github.com/EL-BID/Agregador-de-indicadores/blob/master/zscore.png?raw=true)
 
 &nbsp;
 Una de las aplicaciones de esta normalizacion es comparar un conjunto de indicadores en un mismo gráfico. En el siguiente ejemplo se gráfico se muestran más de 1500 indicadores relacionados con género para 8 países para el 2014. En el gráfico se puede ver que Somalia e iraq tienen muchos más indicadores debajo de la media que el resto de países.
@@ -130,6 +130,10 @@ Una de las aplicaciones de esta normalizacion es comparar un conjunto de indicad
 
 El paso a paso de este ejemplo lo pueden ver en [/ejemplos/ranking_plot.R](https://github.com/EL-BID/Agregador-de-indicadores/blob/master/examples/ranking_plot.R)
 
+Para mayor información sobre la normalizacioón de datos ejecuta en R:
+```r
+?ai_
+```
 
 #### 3. Cache
 
@@ -144,7 +148,6 @@ cache <- ai_cache(lang='en')
 # Buscamos indicadores utilizando el cache
 df<-ind_search(pattern="poverty", cache=cache)
 ```
-
 Para ver los datos disponibles en el caché se utiliza el siguiente código
 
 ```r
@@ -197,7 +200,7 @@ El agregador de indicadores utiliza las siguientes librerias de R:
 
 Adicionalmente se utiliza otras librerias de github: 
 
-   + 'arcuellar88/iadbstats' para conectarse con el [API del Banco Interamericano de Desarrollo](https://github.com/EL-BID/Libreria-R-Numeros-para-el-Desarrollo)
+   + 'EL-BID/Libreria-R-Numeros-para-el-Desarrollo' para conectarse con el [API del Banco Interamericano de Desarrollo](https://github.com/EL-BID/Libreria-R-Numeros-para-el-Desarrollo)
    + 'arcuellar88/govdata360R' para conectarse con el [API govdata360 del Banco Mundial](https://github.com/arcuellar88/govdata360R)
 
 
@@ -216,11 +219,11 @@ Adicionalmente se utiliza otras librerias de github:
 ### Ideas
 1. Agregar filtros a la búsqueda de indicadores
 2. Verificar duplicados entre distintas fuentes de información
-3. Mejorar el tiempo de carga par World Bank (reduciendo el número de llamadas al api)[link](https://groups.google.com/forum/#!topic/world-bank-api/n0gOPdoh64o) -
+3. Mejorar el tiempo de carga par World Bank (reduciendo el número de llamadas al api)[link](https://groups.google.com/forum/#!topic/world-bank-api/n0gOPdoh64o) 
 
 ### Referencias
 
-Esta herramienta estaá basada en las siguientes dos herramientas:
+Esta herramienta está basada en las siguientes dos herramientas:
 
 + [wbstats](https://github.com/GIST-ORNL/wbstats) de Jesse Piburn
 + [WDI](https://github.com/vincentarelbundock/WDI) de Vincent Arel-Bundock

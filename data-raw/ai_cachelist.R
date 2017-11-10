@@ -11,3 +11,7 @@ save(topics, file = "data/topics.RData", compress = "xz")
 
 schema<-read.csv("./data-raw/schemaMatch.csv")
 save(schema, file = "data/schema.RData", compress = "xz")
+
+
+keywords<-read.csv("./data-raw/classify.csv", stringsAsFactors = FALSE)
+save(keywords, file = "data/keywords.RData", compress = "xz")

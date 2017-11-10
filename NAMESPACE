@@ -2,6 +2,7 @@
 
 export(ai)
 export(ai_cache)
+export(ai_normalize)
 export(cache.NC.data)
 export(ind_search)
 export(load.360.data)

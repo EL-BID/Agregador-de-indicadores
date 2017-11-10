@@ -4,7 +4,7 @@
 \alias{meta_indicators}
 \title{Download updated indicator information from World Bank API, Numbers for Development API and No Celings}
 \usage{
-meta_indicators(lang = c("en", "es", "fr", "ar", "zh"))
+meta_indicators(lang = c("en", "es"))
 }
 \arguments{
 \item{lang}{Language in which to return the results. If \code{lang} is unspecified,
@@ -25,9 +25,6 @@ The options for \code{lang} are:
 \itemize{
 \item \code{en}: English
 \item \code{es}: Spanish
-\item \code{fr}: French
-\item \code{ar}: Arabic
-\item \code{zh}: Mandarin
 }
 }
 \examples{

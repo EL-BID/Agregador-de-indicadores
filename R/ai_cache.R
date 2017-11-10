@@ -15,15 +15,12 @@
 #' \itemize{
 #' \item \code{en}: English
 #' \item \code{es}: Spanish
-#' \item \code{fr}: French
-#' \item \code{ar}: Arabic
-#' \item \code{zh}: Mandarin
 #' }
 #' @examples
 #' # default is english. To specific another language use argument lang
 #' meta_indicators(lang = "es")
 #' @export
-meta_indicators <- function(lang = c("en", "es", "fr", "ar", "zh")) {
+meta_indicators <- function(lang = c("en", "es")) {
   
   # if none supplied english is default
   lang <- match.arg(lang)
@@ -101,7 +98,7 @@ ai_classify_indicators<-function(indicator_df)
 {
   suppressWarnings(suppressMessages(library(dplyr)))
   
-  keywords<-read.csv("classify.csv", stringsAsFactors = FALSE)
+  keywords<-agregadorindicadores::keywords
   
   #Gender
   kw_female<-aggregate(keyword ~.,data =  keywords[keywords$classify=='gender' & keywords$val=='female',],paste, collapse="|")
@@ -114,8 +111,6 @@ ai_classify_indicators<-function(indicator_df)
   
   #Area
   indicator_df<-indicator_df %>% mutate (area = ifelse (grepl("urban",indicator), "urban", ifelse (grepl("rural",indicator), "rural", "total")) %>% as.character())
-  
-  detach("package:dplyr", unload=TRUE) 
   
   return(indicator_df)
 }

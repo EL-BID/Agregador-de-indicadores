@@ -34,9 +34,6 @@ The options for \code{lang} are:
 \itemize{
 \item \code{en}: English
 \item \code{es}: Spanish
-\item \code{fr}: French
-\item \code{ar}: Arabic - only for the World Bank
-\item \code{zh}: Mandarin - only for the World Bank
 }
 }
 \examples{
