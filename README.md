@@ -1,23 +1,35 @@
 ---
 # Agregador-de-indicadores
 
-### Nombre
-agregadorindicadores
-
-### Descripción y contexto
+## Descripción y contexto
 ---
 El “Agregador de Indicadores” permite a académicos, multilaterales y otras organizaciones con interés en analizar indicadores de desarrollo, analizar y comparar indicadores de diferentes fuentes y con diversas unidades de medida. 
 Con el esta herramienta es posible buscar con una función los indicadores del [Banco Mundial](https://data.worldbank.org/data-catalog), [Numbers for Development,  N4D](https://data.iadb.org/NumbersForDevelopment/NumbersForDevelopment) del Banco Interamericano de Desarrollo  y de [No Ceilings](http://www.noceilings.org)
 
-### Guía de usuario
+## Guía de instalación
+---
+Para utilizar la librería en R se debe ejecutar el siguiente codigo:
+
+```r
+install.packages('devtools')
+library(devtools)
+install_github('EL-BID/Libreria-R-Numeros-para-el-Desarrollo')
+install_github("arcuellar88/govdata360R")
+install_github('EL-BID/Agregador-de-indicadores')
+library(agregadorindicadores)
+```
+
+## Guía de usuario
 ---
 
-#### Cargar la libreria
+### 1. Cargar la libreria
 ```r
 library(agregadorindicadores)
 ```
 
-#### 1. Buscar indicadores de desempleo
+### 2. Buscar indicadores 
+En este caso buscaremos indicadores relacionados con desempleo.
+
 ```r
 df<-ind_search(pattern="unemployment")
 df[1:5,1:3]
@@ -42,12 +54,13 @@ Para mayor información sobre la buúsqueda de indicadores ejecuta en R:
 ?ind_search
 ```
 
-#### 2. Descargar informacion de dos indicadores
+### 3. Descargar informacion de los indicadores
 
 En este ejemplo vamos a descargar los datos de dos indicadores para dos países entre el 2014 y el 2015
 
 ```r
 data<-ai(indicator = c("SL.UEM.TOTL.FE.ZS","SOC_6562"), country = c("CO","PE"),startdate = 2014, enddate=2015)
+ 
  data[1:8,1:6]
   iso2  country year        src_id_ind  value                                                             indicator
 1   CO Colombia 2015 SL.UEM.TOTL.FE.ZS 11.843 Unemployment, female (% of female labor force) (modeled ILO estimate)
@@ -64,14 +77,13 @@ Para mayor información sobre la descarga de datos de los indicadores ejecuta en
 ```r
 ?ai
 ```
-#### 4. ggplot examples
+### 4. Ejemplo de visualización:
 
-For all plot example we will use plot.ly library for r.
+*Usaremos la librera plotly para los ejemplos*
 
 ```r
 library(plotly)
 ```
-
 
 ##### Plot one indicator "Agricultural land (% of land area)" for 4 countries in 2014
 ```r
@@ -114,7 +126,7 @@ ay <- list(
 ![](https://plot.ly/~arcuellar88/13.png)
 
 
-#### 3. Ranking de indicadores
+### 5. Ranking de indicadores
 
 El agregador de indicadores ofrece una funcionalidad adicional para normalizar los indicadores y hacer un raking por país y por año. La normalización consiste en comparar el valor del indicador de cada país contra la media y la desviación de ese mismo indicador para todos los países para cada año. Para cada indicador, país y año se calcula el zscore de la siguiente manera:
 
@@ -128,6 +140,7 @@ Una de las aplicaciones de esta normalizacion es comparar un conjunto de indicad
 ![](https://plot.ly/~arcuellar88/9.png)
 &nbsp;
 
+Puedes ver una explicación más detallada de esta función en el [/ejemplos/normalización](https://github.com/EL-BID/Agregador-de-indicadores/blob/master/examples/Normalizacion.md)
 El paso a paso de este ejemplo lo pueden ver en [/ejemplos/ranking_plot.R](https://github.com/EL-BID/Agregador-de-indicadores/blob/master/examples/ranking_plot.R)
 
 Para mayor información sobre la normalizacioón de datos ejecuta en R:
@@ -135,9 +148,9 @@ Para mayor información sobre la normalizacioón de datos ejecuta en R:
 ?ai_normalize
 ```
 
-#### 3. Cache
+### 6. Cache
 
-Para mejorar el desempenño de la herramienta, esta cuenta con una pequeña base de datos de los metadatos de los indicadores que llamamos caché. Esta fue actualizada por última vez el 1 de Noviembre del 2017. Para utilizar una versión más reciente se puede utilizar el siguiente código:
+Para mejorar el desempeño de la herramienta, esta cuenta con una pequeña base de datos de los metadatos de los indicadores que llamamos caché. Esta fue actualizada por última vez el 1 de Noviembre del 2017. Para utilizar una versión más reciente se puede utilizar el siguiente código:
 
 ```r
 library(agregadorindicadores)
@@ -159,39 +172,7 @@ List of 3
  $ indicators   :'data.frame':	19496 obs. of  11 variables:
 ```
 
-### Guía de instalación
----
-Para utilizar la librería en R se debe ejecutar el siguiente codigo:
-
-```r
-install.packages('devtools')
-library(devtools)
-install_github('EL-BID/Libreria-R-Numeros-para-el-Desarrollo')
-install_github("arcuellar88/govdata360R")
-install_github('EL-BID/Agregador-de-indicadores')
-library(agregadorindicadores)
-```
-
-Si el repositorio 'EL-BID/Agregador-de-indicadores' es privado:
-
-1) Instalar dependencias de github
-```r
-install.packages('devtools')
-library(devtools)
-install_github('EL-BID/Libreria-R-Numeros-para-el-Desarrollo')
-install_github("arcuellar88/govdata360R")
-```
-
-2) Importar el repositorio a RStudio
-
-File->new project -> Version Control-> copiar url de github (el mismo de clonar)
-
-3) Instalar
-
-En la pestaña Build-> 'Install and Restart'
-
-
-#### Dependencias
+## Dependencias
 El agregador de indicadores utiliza las siguientes librerias de R:
 
    + **dplyr**, **tidyr** , **sqldf** y **gdata** se utilizan para manipular los datos (merge, join, agregar   columnas, filtrar, etc.)
@@ -203,25 +184,26 @@ Adicionalmente se utiliza otras librerias de github:
    + 'EL-BID/Libreria-R-Numeros-para-el-Desarrollo' para conectarse con el [API del Banco Interamericano de Desarrollo](https://github.com/EL-BID/Libreria-R-Numeros-para-el-Desarrollo)
    + 'arcuellar88/govdata360R' para conectarse con el [API govdata360 del Banco Mundial](https://github.com/arcuellar88/govdata360R)
 
+## Cómo contribuir y Código de conducta 
 
-### Cómo contribuir y Código de conducta 
+A este repositorio no se le está dando actualmente mantenimiento. Si estás interesado en contribuir al repositorio, ya sea agregando fuentes de datos nuevas, dando mantenimiento o solucionando bugs, escríbenos a code.iadb.org.
 
 [CONTRIBUTING link](https://github.com/EL-BID/Agregador-de-indicadores/blob/master/CONTRIBUTING.md)
 
-### Autor/es
----
-[Alejandro Rodríguez Cuéllar](https://github.com/arcuellar88)
-
-### Licencia 
----
-[GNU General Public License v3.0](https://github.com/EL-BID/Agregador-de-indicadores/blob/master/LICENSE)
-
-### Ideas
+Algunas áreas de mejora de esta librería son:
 1. Agregar filtros a la búsqueda de indicadores
 2. Verificar duplicados entre distintas fuentes de información
 3. Mejorar el tiempo de carga par World Bank (reduciendo el número de llamadas al api)[link](https://groups.google.com/forum/#!topic/world-bank-api/n0gOPdoh64o) 
 
-### Referencias
+## Autor/es
+---
+[Alejandro Rodríguez Cuéllar](https://github.com/arcuellar88)
+
+## Licencia 
+---
+[GNU General Public License v3.0](https://github.com/EL-BID/Agregador-de-indicadores/blob/master/LICENSE)
+
+## Referencias
 
 Esta herramienta está basada en las siguientes dos herramientas:
 
