@@ -203,7 +203,7 @@ Algunas áreas de mejora de esta librería son:
 ---
 El software de este repositorio está licenciado bajo una licencia [GNU General Public License v3.0](https://github.com/EL-BID/Agregador-de-indicadores/blob/master/LICENSE).
 
-La documentación de soporte y uso, incluyendo este archivo README.md y el contenido en la carpeta "examples" está licenciado bajo la licencia Creative Commons. 
+La documentación de soporte y uso, incluyendo este archivo README.md y el contenido en la carpeta "docs" está licenciado bajo la licencia Creative Commons. 
 
 ## Referencias
 
