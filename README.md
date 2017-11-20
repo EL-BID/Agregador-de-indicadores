@@ -62,7 +62,7 @@ data<-ai(indicator = c("SL.UEM.TOTL.FE.ZS","SOC_6562"), country = c("CO","PE"),s
 
 Para mayor información sobre la descarga de datos de los indicadores ejecuta en R:
 ```r
-?ai
+?ai_normalize
 ```
 #### 4. ggplot examples
 
