@@ -62,7 +62,7 @@ data<-ai(indicator = c("SL.UEM.TOTL.FE.ZS","SOC_6562"), country = c("CO","PE"),s
 
 Para mayor información sobre la descarga de datos de los indicadores ejecuta en R:
 ```r
-?ai_normalize
+?ai
 ```
 #### 4. ggplot examples
 
@@ -132,7 +132,7 @@ El paso a paso de este ejemplo lo pueden ver en [/ejemplos/ranking_plot.R](https
 
 Para mayor información sobre la normalizacioón de datos ejecuta en R:
 ```r
-?ai_
+?ai_normalize
 ```
 
 #### 3. Cache
