@@ -140,8 +140,8 @@ Una de las aplicaciones de esta normalizacion es comparar un conjunto de indicad
 ![](https://plot.ly/~arcuellar88/9.png)
 &nbsp;
 
-Puedes ver una explicación más detallada de esta función en el [/ejemplos/normalización](https://github.com/EL-BID/Agregador-de-indicadores/blob/master/examples/Normalizacion.md)
-El paso a paso de este ejemplo lo pueden ver en [/ejemplos/ranking_plot.R](https://github.com/EL-BID/Agregador-de-indicadores/blob/master/examples/ranking_plot.R)
+Puedes ver una explicación más detallada de esta función en el [/ejemplos/normalización](https://github.com/EL-BID/Agregador-de-indicadores/blob/master/DOCS/Normalizacion.md)
+El paso a paso de este ejemplo lo pueden ver en [/ejemplos/ranking_plot.R](https://github.com/EL-BID/Agregador-de-indicadores/blob/master/DOCS/ranking_plot.R)
 
 Para mayor información sobre la normalizacioón de datos ejecuta en R:
 ```r
