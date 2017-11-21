@@ -1,0 +1,123 @@
+---
+title: "Tutorial del Agregador de Indicadores"
+author: "Jose Luis Delgado Davara (@jldelda)"
+date: "Thursday, October 05, 2017"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+# Tutorial: ¿Cómo analizar más de 1000 indicadores de desarrollo de diferentes fuentes con una misma herramienta?
+
+¿Alguna vez has tenido que hacer un análisis de desarrollo y no has sabido cómo empezar o dónde buscar la información para avalar tu hipótesis? Este es un desafío común que los analistas, economistas, académicos y profesionales de desarrollo enfrentan a menudo. 
+
+El BID, en su labor por estudiar temas relacionados con género en los diferentes paises, desarrolló una libreria de R que facilita la recopilación y análisis de indicadores de género en los diferentes países. Hoy, una evoluación de ese trabajo con una mirada de escala y reutilización, ha hecho que se convirtiera en la librería de R "Agregador de indicadores", una librería abierta y disponible para todos en el **repositorio de código del Banco**. Esta libreria permite buscar indicadores por palabras clave, descargarlos y compararlos. 
+
+### La libreria Agregador de Indicadores te permite buscar, descargar y comparar indicadores de Números para el Desarrollo (portal de datos abiertos del BID), el portal de datos del Banco Mundial y de No Ceilings.
+
+Si sabes programar en R y quieres saber cómo utilizar esta libreria, en este tutorial explicaremos cómo hacerlo.
+
+**Veamos paso a paso cómo analizar datos de desempleo con más de 1000 indicadores.**
+
+## Paso 1: Prepara el ambiente de trabajo y descarga las librerias
+
+Necesitarás tener descargado R en tu computadora. La manera más común y más fácil para utilizar R es a través del ambiente de programación (IDE) de RStudio[https://www.rstudio.com/products/rstudio/download/].
+
+Una recomendación es utilizar un libro de notas de R (R notebook) y abrir (este tutorial)[] en RStudio. El libro de notas (Rnotebook) te permite mezclar lenguaje de texto escrito con lenguaje de programación en un mismo documento. Aquí podrás leer más sobre cómo usar R notebooks: http://rmarkdown.rstudio.com/r_notebooks.html 
+
+```{r Descarga de librería}
+install.packages('devtools',repos = "http://cran.us.r-project.org") #Libreria que permite instalar librerías que no están en el repositorio CRAN.
+install_github('EL-BID/Libreria-R-Numeros-para-el-Desarrollo', force = TRUE)
+install_github("arcuellar88/govdata360R", force = TRUE)
+install_github('EL-BID/Agregador-de-indicadores', force = TRUE)
+install.packages("xlsx",repos = "http://cran.us.r-project.org")
+```
+*Nota*: Si intentas descargar las librerías desde una red con seguridad (por ejemplo una red de internet del trabajo), puede dar problemas. Conéctate a una red con menos seguridad, como la de tu casa o la red abierta del lugar de trabajo.
+
+```{r instalación de librerías}
+library(devtools)
+library(agregadorindicadores)
+library(xlsx) 
+library(ggplot2)
+```
+
+
+## Paso 2: Encuentra los indicadores relacionados con tu área de estudio
+
+El Agregador de Indicadores hace una búsqueda por palabras clave de los indicadores. Imaginemos para nuestro ejemplo, que queremos hacer un análisis del sector terciario en los países de la región. Para ello, haremos una búsqueda de indicadores relacionados con "agricultura".
+
+Utilizando la función "ind_search" y la palabra clave "agruciltura", la librería encontrará todos los indicadores de N4D, el Banco Mundial y de No Ceilings con la palabra "agricultura" en el nombre o en la descripción. (Utiliza el comando "?ind_search" para saber más)
+
+```{r}
+# Encuentra todos los indicadores relacionados con la palabra clave
+ind<-ind_search(pattern="agriculture|agricultura", fields = c("indicator", "ind_description", "topic"), extra = TRUE)
+
+sprintf("Número de indicadores encontrados: %s", nrow(ind))
+# Muestra en pantalla 5 indicadores
+#head(ind$indicator, 5) #Quitar # para ejecutar
+
+# Muestra en pantalla los temas de los indicadores encontrados
+unique(ind$topic) #Quitar # para ejecutar
+```
+
+La librería ha encontrado 285 indicadores, si quieres ver con más detalle los indicadores encontrados, puedes utilizar el comando "View()" o puedes exportar los datos en un archivo .xls. Estos son algunos de los indicadores encontrados:
+- Exports by Sector: Agricultural Raw Materials (%) [Código: INT_5892]
+- Imports by Sector: Agricultural Raw Materials (Percentage) [Código: INT_15892] 
+- % of Workers in Agriculture, Hunting, Forestry, and Fishing [Código: SOC_049]
+
+```{r}
+View(ind)
+#Exporta en excel el listado de nombres los indicadores
+write.xlsx(ind, "indicadores.xlsx")
+```
+
+## Paso 3: Análisis de un indicador 
+
+Con el comando "ai()" puedes descargar los datos del indicador de interés. Veamos cómo visualizar la evolución de un indicador para cinco países:
+
+```{r}
+Workers = ai(indicator = "SOC_049", country = c("BO","MX","SV","CO","GT"))
+
+ggplot(data=Workers, aes(x=year, y=value, group=country, colour=country)) + ggtitle("% de trabajadores en agricultura, caza, silvicultura y pesca") +
+    geom_line() + ylim(0, 65)
+    geom_point()
+
+Services = ai(indicator = "SL.SRV.EMPL.ZS", country = c("BO","MX","SV","CO","GT"))
+
+ggplot(data=Services, aes(x=year, y=value, group=country, colour=country)) + ggtitle("% de los trabajadores en el sector servicios") +
+    geom_line() + ylim(0, 65)
+    geom_point()
+```
+
+Con este ejemplo hemos querido validar la hipótesis de que los trabajos relacionados con la agricultura y pesca están decayendo, a la vez que aumenta el sector de servicios. Las figuras 1 y 2 muestran además que Guatemala y Bolivia tienen economías más centradas en el sector primario que el terciario, al contrario que Colombia o México.
+
+## Paso 4: Análisis de un país
+Supongamos ahora que estamos analizando Colombia desde una perspectiva más amplia y queremos saber qué indicadores son los más relevantes para el país.
+
+Para ello, la librería nos ofrece la función de normalizar todos los indicadores. De esta manera podemos hacer un ranking de los indicadores e identificar aquellos que mejor y peor están respecto a los otros países con ese indicador. En este ejemplo, buscaremos los mejores y peores indicadores relacionados con agricultura para Colombia en 2015.
+
+```{r}
+# Descarga los datos de cada unos de los indicadores de agricultura para el país de Colombia
+Data_agriculture =  ai(indicator = ind$src_id_ind)
+
+#Normaliza los valores de los indicadores 
+Data_agriculture_norm = ai_normalize(Data_agriculture)
+
+# Ordena de mayor a menor los indicadores según los valores normalizados
+Data_agriculture_norm = Data_agriculture_norm %>% filter(country == "Colombia" & year == "2015") %>% arrange(desc(value_norm))
+
+TOP10 = head(Data_agriculture_norm$indicator, n=10)
+print(TOP10)
+write.xlsx(Data_agriculture_norm, "Data_agriculture_norm.xlsx")
+```
+Nota: Debido a la cantidad de información, la descarga de muchos indicadores puede demorar varios minutos.
+
+De este listado de indicadore, podemos subrayar que Colombia, en 2014 se destacó de otros países por el porcentaje alto de empleo informal en sectores diferentes de agricultura. Además, también podemos decir que el porcentaje de empleo masculino en agricultura también resalta con respecto a otros países.
+
+Este análisis nos ha permitido sacar unas conclusiones previas, las cuales vales la pena contrastar y estudiar en profundidad; pero el motivo de este ejemplo es meramente demostrativo.
+
+Esperamos que te haya parecido útil este tutorial y te animes a utilizar esta librería para tus propios análisis. Puedes descargar del repositorio de Código para el Desarrollo esta entrada y ejecutarla desde el ambiente de RStudio.
+
+
+
+
