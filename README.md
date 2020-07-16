@@ -1,5 +1,6 @@
 ---
 # Agregador-de-indicadores
+[![Analytics](https://gabeacon.irvinlim.com/UA-4677001-16/Agregador-de-indicadores/readme?useReferer)](https://github.com/EL-BID/Agregador-de-indicadores/)
 
 ## Descripción y contexto
 ---
