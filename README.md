@@ -1,6 +1,3 @@
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=EL-BID_Agregador-de-indicadores&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=EL-BID_Agregador-de-indicadores)
-
----
 # Agregador-de-indicadores
 
 ## Descripción y contexto
